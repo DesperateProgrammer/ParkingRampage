@@ -38,6 +38,23 @@
 #define MAINMENU_FADETIME               1000
 #define LEVEL_FADETIME                  500
 
+#define SPRITE_CAR_A              0
+#define SPRITE_CAR_TARGET         1
+#define SPRITE_CAR_B              2
+#define SPRITE_CAR_C              3
+#define SPRITE_CAR(n)             ((n) & 3)
+#define SPRITE_TRUCK_A_1          4
+#define SPRITE_TRUCK_A_2          5
+#define SPRITE_TRUCK_B_1          6
+#define SPRITE_TRUCK_B_2          7
+#define SPRITE_TRUCK_1(n)         (((n) & 1) * 2 + 4)
+#define SPRITE_TRUCK_2(n)         (((n) & 1) * 2 + 5)
+#define SPRITE_BUS_1              8
+#define SPRITE_BUS_2              9
+#define SPRITE_TANKTRUCK_1       10
+#define SPRITE_TANKTRUCK_2       11
+#define SPRITE_SELECTOR          12
+
 typedef enum EFADE
 {
   eFADEIN,

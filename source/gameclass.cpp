@@ -15,43 +15,32 @@ void CGAME::Run()
   Destruct();
 }
 
+#define CONCAT(a,b,c,d) a##b##c##d
+
+#define LOADSPRITE(id, width, height, offset) \
+  m_spriteContent[id] = oamAllocateGfx(&oamSub, CONCAT(SpriteSize_,width,x,height), SpriteColorFormat_256Color);\
+	dmaCopy((uint8_t*)spriteTiles + (offset), m_spriteContent[id], width*height)
+
 void CGAME::LoadCarSprites()
 {
-  // Car A, Length 2
-  m_spriteContent[0] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy(spriteTiles, m_spriteContent[0], 16*32);
-  // Target Car, length 2
-  m_spriteContent[1] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 16*32, m_spriteContent[1], 16*32);
-  // Car B, Length 2
-  m_spriteContent[2] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 6*16*32, m_spriteContent[2], 16*32);
-  // Car C, Length 2
-  m_spriteContent[3] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 7*16*32, m_spriteContent[3], 16*32);
-  // Truck A, Length 3, Needs 2 Parts
-  m_spriteContent[4] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 2*16*32, m_spriteContent[4], 16*32);
-  m_spriteContent[5] = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 8*16*32, m_spriteContent[5], 16*16);
-  // Truck B, Length 3, Needs 2 Parts
-  m_spriteContent[6] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 3*16*32, m_spriteContent[6], 16*32);
-  m_spriteContent[7] = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 9*16*32, m_spriteContent[7], 16*16);
+  // Cars, Length 2
+  LOADSPRITE(SPRITE_CAR_A,16,32,0) ;
+  LOADSPRITE(SPRITE_CAR_TARGET,16,32,16*32) ;
+  LOADSPRITE(SPRITE_CAR_B,16,32,6*16*32) ;
+  LOADSPRITE(SPRITE_CAR_C,16,32,7*16*32) ;
+  // Trucks, Length 3 in 2 parts
+  LOADSPRITE(SPRITE_TRUCK_A_1,16,32,2*16*32) ;
+  LOADSPRITE(SPRITE_TRUCK_A_2,16,16,8*16*32) ;
+  LOADSPRITE(SPRITE_TRUCK_B_1,16,32,3*16*32) ;
+  LOADSPRITE(SPRITE_TRUCK_B_2,16,16,9*16*32) ;
   // Bus, Length 4, Needs 2 Parts
-  m_spriteContent[8] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 2*16*32, m_spriteContent[8], 16*32);
-  m_spriteContent[9] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 8*16*32, m_spriteContent[9], 16*32);
+  LOADSPRITE(SPRITE_BUS_1,16,32,4*16*32) ;
+  LOADSPRITE(SPRITE_BUS_2,16,32,10*16*32) ;
   // Tank Truck, Length 4, Needs 2 Parts
-  m_spriteContent[10] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 2*16*32, m_spriteContent[10], 16*32);
-  m_spriteContent[11] = oamAllocateGfx(&oamSub, SpriteSize_16x32, SpriteColorFormat_256Color);
-	dmaCopy((uint8_t*)spriteTiles + 8*16*32, m_spriteContent[11], 16*32);
+  LOADSPRITE(SPRITE_TANKTRUCK_1,16,32,5*16*32) ;
+  LOADSPRITE(SPRITE_TANKTRUCK_2,16,32,11*16*32) ;
   // Car Select Cursor
-  m_spriteContent[12] = oamAllocateGfx(&oamSub, SpriteSize_16x16, SpriteColorFormat_256Color);
-  dmaCopy((uint8_t*)spriteTiles + 8*16*32 + 1*16*16, m_spriteContent[12], 16*16);
+  LOADSPRITE(SPRITE_SELECTOR,16,16,8*16*32 + 1*16*16) ;
 }
 
 
@@ -135,7 +124,7 @@ void CGAME::UpdateCarsOnScreen(bool selectorShown)
     uint32_t scale = (1 << (12 + 8)) / (2*sinLerp(time *50)) ;
     oamRotateScale(&oamSub, 1, 0, scale, scale) ;
     oamSet(&oamSub, 0, selectorX, selectorY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
-         m_spriteContent[12], 1, true, false, true, true, false);
+         m_spriteContent[SPRITE_SELECTOR], 1, true, false, true, true, false);
   }
 
   for (int i=0;i<16;i++)
@@ -149,8 +138,8 @@ void CGAME::UpdateCarsOnScreen(bool selectorShown)
           {
             case 0:
             case 1:
-              dataA =  m_spriteContent[m_carData[i].specials * 2 + 4];
-              dataB =  m_spriteContent[m_carData[i].specials * 2 + 4 + 1];
+              dataA =  m_spriteContent[SPRITE_TRUCK_1(m_carData[i].specials)];
+              dataB =  m_spriteContent[SPRITE_TRUCK_2(m_carData[i].specials)];
               break;
             default:
               continue;
@@ -189,7 +178,7 @@ void CGAME::UpdateCarsOnScreen(bool selectorShown)
             case 1:
             case 2:
             case 3:
-              data = m_spriteContent[m_carData[i].specials];
+              data = m_spriteContent[SPRITE_CAR(m_carData[i].specials)];
               break;
             default:
               continue;

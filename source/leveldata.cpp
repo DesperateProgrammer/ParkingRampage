@@ -208,10 +208,10 @@ SLEVELDATA gLevels[] =
         ORIENTATION_LEFT, TRUCK_A, LENGTH_3, 0, 4
       },
       {
-        ORIENTATION_DOWN, TRUCK_B, LENGTH_2, 5, 3
+        ORIENTATION_DOWN, TRUCK_B, LENGTH_3, 5, 3
       },
     }
-  },   
+  },
   {
     6, 6,
     eBEGINNER, 

@@ -196,8 +196,8 @@ void CGAME::ShowMainMenuSelector()
 {
   int32_t scale = sinLerp(GetTimerTicks()*70);
   oamSet(&oamSub, 0, 2*2*8 + scale * 8 / 4096, 2*2*8 - 25 + 4*8*m_mainMenuItem, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-        m_spriteContent[1], 0, true, false, false, false, false);
+        m_spriteContent[SPRITE_CAR_TARGET], 0, true, false, false, false, false);
   oamSet(&oamSub, 1, 12*2*8 - scale * 8 / 4096, 2*2*8 - 25 + 4*8*m_mainMenuItem, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-        m_spriteContent[1], 0, true, false, false, false, false);
+        m_spriteContent[SPRITE_CAR_TARGET], 0, true, false, false, false, false);
   oamUpdate(&oamSub);  
 }
