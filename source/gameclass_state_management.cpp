@@ -1,0 +1,101 @@
+#include "gameclass.h"
+#include <nds.h>
+
+/** 
+    Tick() is called continiously and shall return
+    as fast as possible. 
+    
+    For the game engine, we will wait for a frame
+    and scan the keys. So subsequent gamestate ticks will
+    be called wonce for every frame
+    
+**/
+bool CGAME::Tick()
+{
+  swiWaitForVBlank();
+  scanKeys();
+  touchRead(&m_touch);
+  
+  m_keysDown = keysDown() ;
+  m_keysHeld = keysHeld() ;
+  
+  if (m_keysDown & KEY_TOUCH)
+  {
+    // if touch just occure, do not mark it as held
+    m_keysHeld &= ~KEY_TOUCH ;
+    memcpy(&m_touchDown, &m_touch, sizeof(m_touch)) ;
+  }
+  
+  for (int screen=0;screen<2;screen++)
+  {  
+    UpdateFading(screen);
+    UpdateRotScale(screen) ;
+  }
+
+  switch (m_state)
+  {
+    case GAMESTATE_LEVELRUNNING:
+      return LevelRunning_Tick() ;
+    case GAMESTATE_LEVELLOADING:
+      return LevelLoading_Tick() ;
+    case GAMESTATE_LEVELPAUSED:
+      return LevelPaused_Tick() ;
+    case GAMESTATE_LEVELWON:
+      return LevelWon_Tick() ;
+    case GAMESTATE_LEVELSELECT:
+      return LevelSelect_Tick() ;
+    case GAMESTATE_LOADING:
+      return Loading_Tick() ;
+    case GAMESTATE_MAINMENU:
+      return MainMenu_Tick() ;
+    default:
+      break;
+  }
+  
+  return true;
+}
+
+/**
+
+  ChangeState will is called to change the current state of the game
+  and is e
+
+**/
+
+bool CGAME::ChangeState(uint8_t newState) 
+{
+  m_state = newState ;
+  switch (m_state)
+  {
+    case GAMESTATE_LOADING:
+      Loading_EnterState() ;
+      break;
+    case GAMESTATE_MAINMENU:
+      MainMenu_EnterState() ;
+      break;
+    case GAMESTATE_LEVELLOADING:
+      LevelLoading_EnterState() ;
+      break;
+    case GAMESTATE_LEVELRUNNING:
+      LevelRunning_EnterState() ;
+      break;
+    case GAMESTATE_LEVELPAUSED:
+      LevelPaused_EnterState() ;
+      break ;
+    case GAMESTATE_LEVELSELECT:
+      LevelSelect_EnterState() ;
+      break ;
+    case GAMESTATE_LEVELWON:
+      LevelWon_EnterState() ;
+      break ;
+    default:
+
+      break;
+  }
+  return true ;
+}
+
+
+
+
+
