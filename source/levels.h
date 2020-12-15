@@ -1,3 +1,6 @@
+// This file was generated
+// Please edit the .lvl files to add or modify entries
+// ===================================================
 {
   6, 6, 
   eADVANCED, 

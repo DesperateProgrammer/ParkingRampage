@@ -163,11 +163,12 @@ else
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-$(OUTPUT).nds: $(OUTPUT).elf $(GAME_ICON)
-$(OUTPUT).elf: $(OFILES)
+$(OUTPUT).nds: $(OUTPUT).elf $(GAME_ICON) 
+$(OUTPUT).elf: levels $(OFILES)
 
 # need to build soundbank first
 $(OFILES): $(SOUNDBANK)
+
 
 #---------------------------------------------------------------------------------
 # rule to build solution from music files
@@ -191,6 +192,13 @@ $(SOUNDBANK) : $(MODFILES)
 %.s %.h: %.png %.grit
 #---------------------------------------------------------------------------------
 	grit $< -fts -o$*
+
+#---------------------------------------------------------------------------------
+# This rule converts all *.lvl files in the source directory and
+# will create their c-structure representation as .h
+#---------------------------------------------------------------------------------
+levels: $(wildcard $(CURDIR)/../source/*.lvl)
+	@$(CURDIR)\..\LevelConvert.exe $< $(patsubst %.lvl,%.h, $<)
 
 #---------------------------------------------------------------------------------
 # Convert non-GRF game icon to GRF if needed

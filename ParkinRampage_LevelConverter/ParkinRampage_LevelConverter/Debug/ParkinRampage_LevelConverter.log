@@ -1,0 +1,7 @@
+﻿  ParkinRampage_LevelConverter.cpp
+C:\Users\Tim.TKM\source\repos\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter.cpp(137,35): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\Tim.TKM\source\repos\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter.cpp(155,31): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\Tim.TKM\source\repos\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter.cpp(166,31): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\Tim.TKM\source\repos\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter.cpp(177,31): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+C:\Users\Tim.TKM\source\repos\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter\ParkinRampage_LevelConverter.cpp(188,31): warning C4018: "<": Konflikt zwischen "signed" und "unsigned"
+  ParkinRampage_LevelConverter.vcxproj -> C:\Users\Tim.TKM\source\repos\ParkinRampage_LevelConverter\Debug\LevelConvert.exe
