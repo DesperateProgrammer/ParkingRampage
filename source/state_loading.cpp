@@ -17,7 +17,7 @@ bool CGAME::Loading_Tick()
   // The Title started to fade in in the start. 
   // we will switch to main menu once either the title faded in and then out again, or 
   // any button was pressed
-  if (m_keysDown)
+  if (m_input.GetKeysDown())
   {
     // Speed up fading out so we exit immediate
     StartFade(SCREEN_BOTTOM, eFADEOUT, 0) ;

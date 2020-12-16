@@ -12,6 +12,7 @@
 #include "tilemap.h"
 #include "textoverlay.h"
 #include "audiostreamig.h"
+#include "inputmanager.h"
 #include <stdint.h>
 
 #define CARCOUNT_MAX      16
@@ -110,10 +111,7 @@ typedef class CGAME
     uint32_t GetCurrentLevelTime() ;
     
     /* Input */
-    touchPosition m_touch;
-    touchPosition m_touchDown;
-    uint16_t m_keysDown = 0;
-    uint16_t m_keysHeld = 0;
+    CINPUTMANAGER m_input ;
     
     /* Level Selection & Search */
     EDIFFICULTY m_difficulty = eBEGINNER ;

@@ -19,7 +19,7 @@ void CGAME::LevelPaused_EnterState()
 
 bool CGAME::LevelPaused_Tick()
 {
-  uint16_t keys = m_keysDown ;
+  uint16_t keys = m_input.GetKeysDown() ;
   if (IsGameWon())
   {
     // TODO: Show win
@@ -33,11 +33,11 @@ bool CGAME::LevelPaused_Tick()
       switch (1 << key)
       {
         case KEY_TOUCH:
-          if ((m_touchDown.py >= 6*16+8) && (m_touchDown.py < 8*16+8))
+          if ((m_input.GetLastTouchPosition().py >= 6*16+8) && (m_input.GetLastTouchPosition().py < 8*16+8))
           {
-            if ((m_touchDown.px >= 4*8) && (m_touchDown.px < 28*8))
+            if ((m_input.GetLastTouchPosition().px >= 4*8) && (m_input.GetLastTouchPosition().px < 28*8))
             {
-              if (m_touchDown.px < 128)
+              if (m_input.GetLastTouchPosition().px < 128)
               {
                 // Return
                 ResetLevelTime() ;

@@ -21,7 +21,7 @@ bool CGAME::LevelRunning_Tick()
     ChangeState(GAMESTATE_LEVELWON) ;
     return true ;
   }
-  uint16_t keys = m_keysDown ;
+  uint16_t keys = m_input.GetKeysDown() ; ;
   for (unsigned int key=0;key<sizeof(keys)*8;key++)
   {
     if (keys & (1 << key))
@@ -30,8 +30,8 @@ bool CGAME::LevelRunning_Tick()
       {
         case KEY_TOUCH:
           {
-            uint8_t row = m_touch.py / 8 ;
-            uint8_t col = m_touch.px / 8 ;
+            uint8_t row = m_input.GetLastTouchDownPosition().py / 8 ;
+            uint8_t col = m_input.GetLastTouchDownPosition().px / 8 ;
             uint8_t selectY = (row - (2 + levelOffsetY*2)) / 2 ;
             uint8_t selectX = (col - (6 + levelOffsetX*2)) / 2 ;               
             if ((row >= 2 + levelOffsetY * 2) && (row < 2 + (levelOffsetY + levelHeight) * 2))
@@ -45,9 +45,9 @@ bool CGAME::LevelRunning_Tick()
                 }
               }
             }
-            if ((m_touchDown.py >= 9*16+8) && (m_touchDown.py < 11*16+8))
+            if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
             {
-              if ((m_touchDown.px >= 21*8) && (m_touchDown.px < 30*8))
+              if ((m_input.GetLastTouchDownPosition().px >= 21*8) && (m_input.GetLastTouchDownPosition().px < 30*8))
               {
                 ChangeState(GAMESTATE_LEVELPAUSED) ;
               }
@@ -103,7 +103,7 @@ bool CGAME::LevelRunning_Tick()
       }
     }
   }
-  keys = m_keysHeld ;
+  keys = m_input.GetKeysHeld() ;
   for (unsigned int key=0;key<sizeof(keys)*8;key++)
   {
     if (keys & (1 << key))
@@ -113,8 +113,8 @@ bool CGAME::LevelRunning_Tick()
         case KEY_TOUCH:
           {
             // this might be drag and drop
-            int16_t moveX = (int16_t)m_touchDown.px - m_touch.px ;
-            int16_t moveY = (int16_t)m_touchDown.py - m_touch.py ;
+            int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
+            int16_t moveY = (int16_t)m_input.GetLastTouchDownPosition().py - m_input.GetLastTouchPosition().py ;
             bool handled = false ;
             if (moveX <= -16)
             {
@@ -157,7 +157,7 @@ bool CGAME::LevelRunning_Tick()
             {
               // reset point of touch down, so we will not move it instantly again but use
               // the new position as the start of movement
-              memcpy(&m_touchDown, &m_touch, sizeof(m_touch)) ;
+              m_input.AccountDrag() ;
             }
           } 
       }

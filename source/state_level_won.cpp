@@ -17,7 +17,7 @@ void CGAME::LevelWon_EnterState()
 
 bool CGAME::LevelWon_Tick()
 {
-if (m_keysDown)
+  if (m_input.GetKeysDown())
   {
     StartFade(SCREEN_BOTTOM, eFADEOUT, 1000) ;
     return true ;

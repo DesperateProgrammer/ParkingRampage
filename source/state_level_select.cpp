@@ -69,7 +69,7 @@ bool CGAME::LevelSelect_Tick()
       StartFade(SCREEN_BOTTOM, eFADEIN, LEVEL_FADETIME) ;
     } else
     {
-      uint16_t keys = m_keysDown ;
+      uint16_t keys = m_input.GetKeysDown() ; ;
       for (unsigned int key=0;key<sizeof(keys)*8;key++)
       {
         if (keys & (1 << key))
@@ -77,11 +77,11 @@ bool CGAME::LevelSelect_Tick()
           switch (1 << key)
           {
             case KEY_TOUCH:
-              if ((m_touchDown.py >= 9*16+8) && (m_touchDown.py < 11*16+8))
+              if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
               {
-                if ((m_touchDown.px >= 4*8) && (m_touchDown.px < 28*8))
+                if ((m_input.GetLastTouchDownPosition().px >= 4*8) && (m_input.GetLastTouchDownPosition().px < 28*8))
                 {
-                  if (m_touchDown.px < 128)
+                  if (m_input.GetLastTouchDownPosition().px < 128)
                   {
                     // Return
                     ResetLevelTime() ;
@@ -131,7 +131,7 @@ bool CGAME::LevelSelect_Tick()
           }
         }
       }
-      keys = m_keysHeld ;
+      keys = m_input.GetKeysHeld() ;
       for (unsigned int key=0;key<sizeof(keys)*8;key++)
       {
         if (keys & (1 << key))
@@ -141,7 +141,7 @@ bool CGAME::LevelSelect_Tick()
             case KEY_TOUCH:
               {
                 // Swipe Left & right?
-                int16_t moveX = (int16_t)m_touchDown.px - m_touch.px ;
+                int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
                 bool handled = false ;
                 if (moveX > 32)
                 {
@@ -163,7 +163,7 @@ bool CGAME::LevelSelect_Tick()
                 {
                   // reset point of touch down, so we will not move it instantly again but use
                   // the new position as the start of movement
-                  memcpy(&m_touchDown, &m_touch, sizeof(m_touch)) ;
+                  m_input.AccountDrag();
                 }
               }
               break;

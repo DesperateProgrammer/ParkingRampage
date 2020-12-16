@@ -30,7 +30,7 @@ bool CGAME::MainMenu_Tick()
   ShowMainMenuSelector();
   ShowMainMenuStart() ;
   ShowMainMenuMusicVolume();
-  uint16_t keys = m_keysDown ;
+  uint16_t keys = m_input.GetKeysDown() ; ;
   for (unsigned int key=0;key<sizeof(keys)*8;key++)
   {
     if (keys & (1 << key))
@@ -39,7 +39,7 @@ bool CGAME::MainMenu_Tick()
       {
         case KEY_TOUCH:
           {
-            uint8_t lineTimes2 = m_touch.py / 8 ;
+            uint8_t lineTimes2 = m_input.GetLastTouchDownPosition().py / 8 ;
             if ((lineTimes2 > 3) && (lineTimes2 < 3 + MAINMENUITEM_COUNT*4))
             {
               uint8_t item = (lineTimes2-3) / 4 ;
@@ -53,7 +53,7 @@ bool CGAME::MainMenu_Tick()
                     ShowMainMenuDifficulty();
                     break;
                   case MAINMENUITEM_VOLUME:
-                    if (m_touch.px < 113 + m_musicVolume/16)
+                    if (m_input.GetLastTouchDownPosition().px < 113 + m_musicVolume/16)
                     {
                       m_musicVolume -= 64 ;
                       if ((m_musicVolume > 1024) || (m_musicVolume < 0))

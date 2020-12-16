@@ -13,18 +13,7 @@
 bool CGAME::Tick()
 {
   swiWaitForVBlank();
-  scanKeys();
-  touchRead(&m_touch);
-  
-  m_keysDown = keysDown() ;
-  m_keysHeld = keysHeld() ;
-  
-  if (m_keysDown & KEY_TOUCH)
-  {
-    // if touch just occure, do not mark it as held
-    m_keysHeld &= ~KEY_TOUCH ;
-    memcpy(&m_touchDown, &m_touch, sizeof(m_touch)) ;
-  }
+  m_input.Tick() ;
   
   for (int screen=0;screen<2;screen++)
   {  
