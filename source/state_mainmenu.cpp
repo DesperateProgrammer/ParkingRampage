@@ -4,9 +4,6 @@
 
 void CGAME::MainMenu_EnterState()
 {
-  DisableAllSprites();
-  m_subText->Clear() ;
-  m_mainText->Clear() ;
   StartFade(1, eFADEIN, MAINMENU_FADETIME) ;
   m_mainMenuTiles->Initialize() ;        
   for (int i=0;i<16;i++)
@@ -23,6 +20,13 @@ void CGAME::MainMenu_EnterState()
   ShowMainMenuDifficulty();
   ShowMainMenuStart() ;
   ShowMainMenuSelector() ;
+}
+
+void CGAME::MainMenu_LeaveState()
+{
+  m_subText->Clear() ;
+  m_mainText->Clear() ;
+  DisableAllSprites();
 }
 
 bool CGAME::MainMenu_Tick()

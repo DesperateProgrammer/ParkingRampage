@@ -17,6 +17,13 @@ void CGAME::LevelPaused_EnterState()
   m_mainText->EnableTextWindow(32, 32, 192, 128) ;  
 }
 
+void CGAME::LevelPaused_LeaveState()
+{
+  m_mainText->Clear() ;
+  m_subText->Clear() ;  
+  DisableAllSprites() ;
+}
+
 bool CGAME::LevelPaused_Tick()
 {
   uint16_t keys = m_input.GetKeysDown() ;
@@ -41,15 +48,12 @@ bool CGAME::LevelPaused_Tick()
               {
                 // Return
                 ResetLevelTime() ;
-                m_mainText->Clear();
                 UnloadLevel() ;
-                DisableAllSprites() ;
                 ChangeState(GAMESTATE_MAINMENU) ;   
                 return true ;                 
               } else
               {
                 // Resume
-                m_mainText->Clear();
                 ChangeState(GAMESTATE_LEVELRUNNING) ;
               }
             }
@@ -58,9 +62,7 @@ bool CGAME::LevelPaused_Tick()
         case KEY_SELECT:
           // Return to main menu
           ResetLevelTime() ;
-          m_mainText->Clear();
           UnloadLevel() ;
-          DisableAllSprites() ;
           ChangeState(GAMESTATE_MAINMENU) ;                    
           break;
         case KEY_START:

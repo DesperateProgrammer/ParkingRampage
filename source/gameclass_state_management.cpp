@@ -53,6 +53,7 @@ bool CGAME::Tick()
 
 bool CGAME::ChangeState(uint8_t newState) 
 {
+  LeaveState();
   m_state = newState ;
   switch (m_state)
   {
@@ -78,13 +79,41 @@ bool CGAME::ChangeState(uint8_t newState)
       LevelWon_EnterState() ;
       break ;
     default:
-
       break;
   }
   return true ;
 }
 
-
+bool CGAME::LeaveState() 
+{
+  switch (m_state)
+  {
+    case GAMESTATE_LOADING:
+      Loading_LeaveState() ;
+      break;
+    case GAMESTATE_MAINMENU:
+      MainMenu_LeaveState() ;
+      break;
+    case GAMESTATE_LEVELLOADING:
+      LevelLoading_LeaveState() ;
+      break;
+    case GAMESTATE_LEVELRUNNING:
+      LevelRunning_LeaveState() ;
+      break;
+    case GAMESTATE_LEVELPAUSED:
+      LevelPaused_LeaveState() ;
+      break ;
+    case GAMESTATE_LEVELSELECT:
+      LevelSelect_LeaveState() ;
+      break ;
+    case GAMESTATE_LEVELWON:
+      LevelWon_LeaveState() ;
+      break ;
+    default:
+      break;
+  }
+  return true;
+}
 
 
 

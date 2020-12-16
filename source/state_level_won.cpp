@@ -15,6 +15,13 @@ void CGAME::LevelWon_EnterState()
   m_subText->EnableTextWindow(32, 64, 192, 80) ;
 }
 
+void CGAME::LevelWon_LeaveState()
+{
+  m_mainText->Clear() ;
+  m_subText->Clear() ;  
+  DisableAllSprites() ;
+}
+
 bool CGAME::LevelWon_Tick()
 {
   if (m_input.GetKeysDown())

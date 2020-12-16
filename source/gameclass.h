@@ -77,6 +77,7 @@ typedef class CGAME
     /* gamestate management */
     bool Tick() ;
     bool ChangeState(uint8_t newState) ;
+    bool LeaveState() ;
 
     /* individual state code */
     void LevelRunning_EnterState() ;
@@ -87,6 +88,14 @@ typedef class CGAME
     void Loading_EnterState() ;
     void MainMenu_EnterState() ;
 
+    void LevelRunning_LeaveState() ;
+    void LevelLoading_LeaveState() ;
+    void LevelPaused_LeaveState() ;
+    void LevelWon_LeaveState() ;
+    void LevelSelect_LeaveState() ;
+    void Loading_LeaveState() ;
+    void MainMenu_LeaveState() ;
+    
     bool LevelRunning_Tick() ;
     bool LevelLoading_Tick() ;
     bool LevelPaused_Tick() ;

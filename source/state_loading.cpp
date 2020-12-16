@@ -1,15 +1,15 @@
 #include "gameclass.h"
 #include <nds.h>
 
-extern int gArgC ;
-extern char **gArgV ;
-
 void CGAME::Loading_EnterState()
 {
-  DisableAllSprites();
   StartFade(0, eFADEIN, TITLE_FADETIME) ;
   StartFade(1, eFADEIN, TITLE_FADETIME) ;
   m_titleTiles->Initialize() ;        
+}
+
+void CGAME::Loading_LeaveState()
+{
 }
 
 bool CGAME::Loading_Tick()

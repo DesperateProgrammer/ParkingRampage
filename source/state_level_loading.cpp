@@ -9,6 +9,10 @@ void CGAME::LevelLoading_EnterState()
   m_subText->Clear() ;
 }
 
+void CGAME::LevelLoading_LeaveState()
+{
+}
+
 bool CGAME::LevelLoading_Tick()
 {
   if (!IsFading(SCREEN_BOTTOM))

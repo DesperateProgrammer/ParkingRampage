@@ -10,6 +10,12 @@ void CGAME::LevelSelect_EnterState()
   DisableAllSprites() ;
 }
 
+void CGAME::LevelSelect_LeaveState()
+{
+  m_mainText->Clear() ;
+  m_subText->Clear() ;  
+}
+
 void CGAME::UpdateLevelSelectionInfo()
 {
   char buffer[32] ;
@@ -85,13 +91,11 @@ bool CGAME::LevelSelect_Tick()
                   {
                     // Return
                     ResetLevelTime() ;
-                    m_mainText->Clear();
                     ChangeState(GAMESTATE_MAINMENU) ;                    
                   } else
                   {
                     // Start
                     ResetLevelTime() ;
-                    m_mainText->Clear();
                     m_moves = 0 ;
                     ChangeState(GAMESTATE_LEVELRUNNING) ;
                   }
@@ -115,7 +119,6 @@ bool CGAME::LevelSelect_Tick()
               break;
             case KEY_SELECT:
               ResetLevelTime() ;
-              m_mainText->Clear();
               ChangeState(GAMESTATE_MAINMENU) ;
               break;
             case KEY_START:

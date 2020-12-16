@@ -13,6 +13,10 @@ void CGAME::LevelRunning_EnterState()
   
 }
 
+void CGAME::LevelRunning_LeaveState()
+{
+}
+
 bool CGAME::LevelRunning_Tick()
 {
   if (IsGameWon())

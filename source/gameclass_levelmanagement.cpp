@@ -57,7 +57,6 @@ void CGAME::UnloadLevel()
 void CGAME::StartLevel()
 {
   UnloadLevel() ;
-  DisableAllSprites() ;
   StartFade(SCREEN_BOTTOM, eFADEOUT, LEVEL_FADETIME) ;
   ChangeState(GAMESTATE_LEVELLOADING);
 }
