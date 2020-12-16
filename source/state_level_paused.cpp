@@ -48,10 +48,8 @@ bool CGAME::LevelPaused_Tick()
                 return true ;                 
               } else
               {
-                // Start
-                ResetLevelTime() ;
+                // Resume
                 m_mainText->Clear();
-                m_moves = 0 ;
                 ChangeState(GAMESTATE_LEVELRUNNING) ;
               }
             }
