@@ -98,7 +98,6 @@ void CGAME::Initialize()
   memset(&m_carData, 0, sizeof(m_carData));
   UnloadLevel() ;
 
-  
   ChangeState(GAMESTATE_LOADING);
 } 
 

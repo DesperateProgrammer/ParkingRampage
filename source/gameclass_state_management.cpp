@@ -10,7 +10,7 @@
     be called wonce for every frame
     
 **/
-bool CGAME::Tick()
+bool CGAME::OnStateTick()
 {
   swiWaitForVBlank();
   m_input.Tick() ;
@@ -51,10 +51,8 @@ bool CGAME::Tick()
 
 **/
 
-bool CGAME::ChangeState(uint8_t newState) 
+bool CGAME::OnStateEnter() 
 {
-  LeaveState();
-  m_state = newState ;
   switch (m_state)
   {
     case GAMESTATE_LOADING:
@@ -84,7 +82,7 @@ bool CGAME::ChangeState(uint8_t newState)
   return true ;
 }
 
-bool CGAME::LeaveState() 
+bool CGAME::OnStateLeave() 
 {
   switch (m_state)
   {

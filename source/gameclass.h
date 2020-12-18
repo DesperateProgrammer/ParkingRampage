@@ -13,6 +13,7 @@
 #include "textoverlay.h"
 #include "audiostreamig.h"
 #include "inputmanager.h"
+#include "statemachine.h"
 #include <stdint.h>
 
 #define CARCOUNT_MAX      16
@@ -62,22 +63,19 @@ typedef enum EFADE
   eFADEOUT,
 } EFADE;
 
-typedef class CGAME
+typedef class CGAME : public CSTATEMACHINE
 {
   protected:
     /* Singleton */
     static class CGAME *m_instance ;
 
-    /* State Machine */
-    uint8_t m_state = GAMESTATE_LOADING ;
-
     void Initialize() ;
     void Destruct() ;
 
     /* gamestate management */
-    bool Tick() ;
-    bool ChangeState(uint8_t newState) ;
-    bool LeaveState() ;
+    virtual bool OnStateTick() ;
+    virtual bool OnStateEnter() ;
+    virtual bool OnStateLeave() ;
 
     /* individual state code */
     void LevelRunning_EnterState() ;
