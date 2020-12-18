@@ -1,7 +1,9 @@
 #pragma once
 
+#include "defaultKeyMapping.h"
 #include <stdint.h>
 #include <vector>
+#include <map>
 #include <nds.h>
 
 #define INPUTEVENT_DOWN       1
@@ -26,6 +28,8 @@ typedef class CINPUTMANAGER
     uint16_t m_keysDown = 0;
     uint16_t m_keysHeld = 0;
     
+    map<uint16_t, uint16_t> m_mapping ;
+    
     touchPosition m_touch;
     touchPosition m_touchDown;
     
@@ -36,6 +40,8 @@ typedef class CINPUTMANAGER
     void OnKeyReleased(uint16_t key) ;
     
   public:
+    CINPUTMANAGER() ;
+  
     void Tick() ;
     
     uint16_t GetKeysDown() ;
@@ -53,5 +59,10 @@ typedef class CINPUTMANAGER
     void EnumerateKeysDown(keyhandler handler, void *context) ;
     void EnumerateKeysRelease(keyhandler handler, void *context) ;
     void EnumerateKeysHeld(keyhandler handler, void *context) ;
+    
+    void SetKeyMapping(uint16_t alias, uint16_t keys) ;
+    uint16_t GetKeyMapping(uint16_t alias) ;
+    bool IsKeyForAlias(uint16_t key, uint16_t alias) ;
+    
 
 } CINPUTMANAGER ;

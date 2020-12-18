@@ -26,145 +26,123 @@ bool CGAME::LevelRunning_Tick()
     return true ;
   }
   uint16_t keys = m_input.GetKeysDown() ; ;
-  for (unsigned int key=0;key<sizeof(keys)*8;key++)
+  if (keys & KEY_TOUCH)
   {
-    if (keys & (1 << key))
+    uint8_t row = m_input.GetLastTouchDownPosition().py / 8 ;
+    uint8_t col = m_input.GetLastTouchDownPosition().px / 8 ;
+    uint8_t selectY = (row - (2 + levelOffsetY*2)) / 2 ;
+    uint8_t selectX = (col - (6 + levelOffsetX*2)) / 2 ;               
+    if ((row >= 2 + levelOffsetY * 2) && (row < 2 + (levelOffsetY + levelHeight) * 2))
     {
-      switch (1 << key)
+      if ((col >= 6 + levelOffsetX * 2) && (col < 6 + (levelOffsetX + levelWidth) * 2))
       {
-        case KEY_TOUCH:
-          {
-            uint8_t row = m_input.GetLastTouchDownPosition().py / 8 ;
-            uint8_t col = m_input.GetLastTouchDownPosition().px / 8 ;
-            uint8_t selectY = (row - (2 + levelOffsetY*2)) / 2 ;
-            uint8_t selectX = (col - (6 + levelOffsetX*2)) / 2 ;               
-            if ((row >= 2 + levelOffsetY * 2) && (row < 2 + (levelOffsetY + levelHeight) * 2))
-            {
-              if ((col >= 6 + levelOffsetX * 2) && (col < 6 + (levelOffsetX + levelWidth) * 2))
-              {
-                uint8_t newSelect = GetOccupyingCar(selectX, selectY) ;
-                if (newSelect != 0xff)
-                {
-                  m_selectedCar = newSelect ;
-                }
-              }
-            }
-            if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
-            {
-              if ((m_input.GetLastTouchDownPosition().px >= 21*8) && (m_input.GetLastTouchDownPosition().px < 30*8))
-              {
-                ChangeState(GAMESTATE_LEVELPAUSED) ;
-              }
-            }            
-          }
-          break;
-        case KEY_LEFT:
-          if (CanMoveLeft())
-          {
-            m_carData[m_selectedCar].x-- ;
-            m_moves++ ;
-          }
-          break;
-        case KEY_RIGHT:
-          if (CanMoveRight())
-          {
-            m_carData[m_selectedCar].x++ ;
-            m_moves++ ;
-          }
-          break;
-        case KEY_DOWN:
-          if (CanMoveDown())
-          {
-            m_carData[m_selectedCar].y++ ;
-            m_moves++ ;
-          }
-          break;
-        case KEY_UP:
-          if (CanMoveUp())
-          {
-            m_carData[m_selectedCar].y-- ;
-            m_moves++ ;
-          }
-          break;
-          break;
-        case KEY_Y: // Left
-          SelectNextCarLeft() ;
-          break;
-        case KEY_A: // Right
-          SelectNextCarRight() ;
-          break;
-        case KEY_B: // Down
-          SelectNextCarDown() ;
-          break;
-        case KEY_X: // Up
-          SelectNextCarUp() ;
-          break;          
-        case KEY_START:
-//        case KEY_SELECT:
-          ChangeState(GAMESTATE_LEVELPAUSED) ;
-          break;
-
+        uint8_t newSelect = GetOccupyingCar(selectX, selectY) ;
+        if (newSelect != 0xff)
+        {
+          m_selectedCar = newSelect ;
+        }
       }
     }
-  }
-  keys = m_input.GetKeysHeld() ;
-  for (unsigned int key=0;key<sizeof(keys)*8;key++)
-  {
-    if (keys & (1 << key))
+    if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
     {
-      switch (1 << key)
+      if ((m_input.GetLastTouchDownPosition().px >= 21*8) && (m_input.GetLastTouchDownPosition().px < 30*8))
       {
-        case KEY_TOUCH:
-          {
-            // this might be drag and drop
-            int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
-            int16_t moveY = (int16_t)m_input.GetLastTouchDownPosition().py - m_input.GetLastTouchPosition().py ;
-            bool handled = false ;
-            if (moveX <= -16)
-            {
-              // try to move right
-              if (CanMoveRight())
-              {
-                m_carData[m_selectedCar].x++ ;
-                m_moves++ ;
-              }     
-              handled = true ;
-            } else if (moveX >= 16)
-            {              
-              // try to move left
-              if (CanMoveLeft())
-              {
-                m_carData[m_selectedCar].x-- ;
-                m_moves++ ;
-              }     
-              handled = true ;
-            }
-            if (moveY >= 16)
-            {
-              // try to move up
-              if (CanMoveUp())
-              {
-                m_carData[m_selectedCar].y-- ;
-                m_moves++ ;
-              }     
-              handled = true ;
-            } else if (moveY <= -16)
-            {              
-              if (CanMoveDown())
-              {
-                m_carData[m_selectedCar].y++ ;
-                m_moves++ ;
-              }     
-              handled = true ;
-            }
-            if (handled)
-            {
-              // reset point of touch down, so we will not move it instantly again but use
-              // the new position as the start of movement
-              m_input.AccountDrag() ;
-            }
-          } 
+        ChangeState(GAMESTATE_LEVELPAUSED) ;
       }
+    }            
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MOVE_LEFT))
+  { 
+    if (CanMoveLeft())
+    {
+      m_carData[m_selectedCar].x-- ;
+      m_moves++ ;
+    }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MOVE_RIGHT))
+  { 
+    if (CanMoveRight())
+    {
+      m_carData[m_selectedCar].x++ ;
+      m_moves++ ;
+    }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MOVE_UP))
+  { 
+    if (CanMoveUp())
+    {
+      m_carData[m_selectedCar].y-- ;
+      m_moves++ ;
+    }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MOVE_DOWN))
+  { 
+    if (CanMoveDown())
+    {
+      m_carData[m_selectedCar].y++ ;
+      m_moves++ ;
+    }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_LEFT))
+    SelectNextCarLeft() ;
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_RIGHT))
+    SelectNextCarRight() ;
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_DOWN))
+    SelectNextCarDown() ;
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_UP))
+    SelectNextCarUp() ;
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_PAUSE))
+    ChangeState(GAMESTATE_LEVELPAUSED) ;
+    
+  keys = m_input.GetKeysHeld() ;
+  if (keys & KEY_TOUCH)
+  {
+    // this might be drag and drop
+    int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
+    int16_t moveY = (int16_t)m_input.GetLastTouchDownPosition().py - m_input.GetLastTouchPosition().py ;
+    bool handled = false ;
+    if (moveX <= -16)
+    {
+      // try to move right
+      if (CanMoveRight())
+      {
+        m_carData[m_selectedCar].x++ ;
+        m_moves++ ;
+      }     
+      handled = true ;
+    } else if (moveX >= 16)
+    {              
+      // try to move left
+      if (CanMoveLeft())
+      {
+        m_carData[m_selectedCar].x-- ;
+        m_moves++ ;
+      }     
+      handled = true ;
+    }
+    if (moveY >= 16)
+    {
+      // try to move up
+      if (CanMoveUp())
+      {
+        m_carData[m_selectedCar].y-- ;
+        m_moves++ ;
+      }     
+      handled = true ;
+    } else if (moveY <= -16)
+    {              
+      if (CanMoveDown())
+      {
+        m_carData[m_selectedCar].y++ ;
+        m_moves++ ;
+      }     
+      handled = true ;
+    }
+    if (handled)
+    {
+      // reset point of touch down, so we will not move it instantly again but use
+      // the new position as the start of movement
+      m_input.AccountDrag() ;
     }
   }
   UpdateCarsOnScreen();

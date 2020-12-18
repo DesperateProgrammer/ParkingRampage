@@ -35,115 +35,102 @@ bool CGAME::MainMenu_Tick()
   ShowMainMenuStart() ;
   ShowMainMenuMusicVolume();
   uint16_t keys = m_input.GetKeysDown() ; ;
-  for (unsigned int key=0;key<sizeof(keys)*8;key++)
+  if (keys & KEY_TOUCH)
   {
-    if (keys & (1 << key))
+    uint8_t lineTimes2 = m_input.GetLastTouchDownPosition().py / 8 ;
+    if ((lineTimes2 > 3) && (lineTimes2 < 3 + MAINMENUITEM_COUNT*4))
     {
-      switch (1 << key)
+      uint8_t item = (lineTimes2-3) / 4 ;
+      if (m_mainMenuItem == item)
       {
-        case KEY_TOUCH:
-          {
-            uint8_t lineTimes2 = m_input.GetLastTouchDownPosition().py / 8 ;
-            if ((lineTimes2 > 3) && (lineTimes2 < 3 + MAINMENUITEM_COUNT*4))
+        // modify item
+        switch (m_mainMenuItem)
+        {
+          case MAINMENUITEM_DIFFICULTY:
+            IncreaseDifficulty();
+            ShowMainMenuDifficulty();
+            break;
+          case MAINMENUITEM_VOLUME:
+            if (m_input.GetLastTouchDownPosition().px < 113 + m_musicVolume/16)
             {
-              uint8_t item = (lineTimes2-3) / 4 ;
-              if (m_mainMenuItem == item)
-              {
-                // modify item
-                switch (m_mainMenuItem)
-                {
-                  case MAINMENUITEM_DIFFICULTY:
-                    IncreaseDifficulty();
-                    ShowMainMenuDifficulty();
-                    break;
-                  case MAINMENUITEM_VOLUME:
-                    if (m_input.GetLastTouchDownPosition().px < 113 + m_musicVolume/16)
-                    {
-                      m_musicVolume -= 64 ;
-                      if ((m_musicVolume > 1024) || (m_musicVolume < 0))
-                        m_musicVolume = 0 ;
-                    } else
-                    {
-                      m_musicVolume += 64 ;
-                      if ((m_musicVolume > 1024) || (m_musicVolume < 0))
-                        m_musicVolume = 1024 ;
-                    }
-                    m_audio->SetMusicVolume(m_musicVolume) ;
-                    break ;
-                  case MAINMENUITEM_START:
-                    StartLevel() ;
-                    return true ;
-                  case MAINMENUITEM_SELECT:
-                    ChangeState(GAMESTATE_LEVELSELECT) ;
-                    return true;
-                }
-              } else 
-              {
-                // select item
-                m_mainMenuItem = item ;
-                break;
-              }
-            }
-          }
-          break ;
-        case KEY_LEFT:
-        case KEY_B:
-        case KEY_SELECT:
-          switch (m_mainMenuItem)
-          {
-            case MAINMENUITEM_DIFFICULTY:
-              DecreaseDifficulty();
-              ShowMainMenuDifficulty();
-              break;
-            case MAINMENUITEM_VOLUME:
               m_musicVolume -= 64 ;
               if ((m_musicVolume > 1024) || (m_musicVolume < 0))
                 m_musicVolume = 0 ;
-              m_audio->SetMusicVolume(m_musicVolume) ;
-              break ;
-            case MAINMENUITEM_START:
-              StartLevel() ;
-              return true ;
-            case MAINMENUITEM_SELECT:
-              ChangeState(GAMESTATE_LEVELSELECT) ;
-              return true;
-          }
-          break;
-        case KEY_RIGHT:
-        case KEY_A:
-        case KEY_START:
-          switch (m_mainMenuItem)
-          {
-            case MAINMENUITEM_DIFFICULTY:
-              IncreaseDifficulty();
-              ShowMainMenuDifficulty();
-              break;
-            case MAINMENUITEM_START:
-              StartLevel() ;
-              return true ;
-            case MAINMENUITEM_VOLUME:
+            } else
+            {
               m_musicVolume += 64 ;
               if ((m_musicVolume > 1024) || (m_musicVolume < 0))
                 m_musicVolume = 1024 ;
-              m_audio->SetMusicVolume(m_musicVolume) ;
-              break ;
-            case MAINMENUITEM_SELECT:
-              ChangeState(GAMESTATE_LEVELSELECT) ;
-              return true;
-          }
-          break;
-        case KEY_UP:
-          m_mainMenuItem = (m_mainMenuItem - 1 + MAINMENUITEM_COUNT) % MAINMENUITEM_COUNT ;
-          ShowMainMenuSelector() ;
-          break;
-        case KEY_DOWN:
-          m_mainMenuItem = (m_mainMenuItem + 1) % MAINMENUITEM_COUNT ;
-          ShowMainMenuSelector() ;
-          break;
-        default:
-          break;
+            }
+            m_audio->SetMusicVolume(m_musicVolume) ;
+            break ;
+          case MAINMENUITEM_START:
+            StartLevel() ;
+            return true ;
+          case MAINMENUITEM_SELECT:
+            ChangeState(GAMESTATE_LEVELSELECT) ;
+            return true;
+        }
+      } else 
+      {
+        // select item
+        m_mainMenuItem = item ;
       }
     }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_MODIFY_MINUS))
+  {  
+    switch (m_mainMenuItem)
+    {
+      case MAINMENUITEM_DIFFICULTY:
+        DecreaseDifficulty();
+        ShowMainMenuDifficulty();
+        break;
+      case MAINMENUITEM_VOLUME:
+        m_musicVolume -= 64 ;
+        if ((m_musicVolume > 1024) || (m_musicVolume < 0))
+          m_musicVolume = 0 ;
+        m_audio->SetMusicVolume(m_musicVolume) ;
+        break ;
+      case MAINMENUITEM_START:
+        StartLevel() ;
+        return true ;
+      case MAINMENUITEM_SELECT:
+        ChangeState(GAMESTATE_LEVELSELECT) ;
+        return true;
+    }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_MODIFY_PLUS))
+  {  
+    switch (m_mainMenuItem)
+    {
+      case MAINMENUITEM_DIFFICULTY:
+        IncreaseDifficulty();
+        ShowMainMenuDifficulty();
+        break;
+      case MAINMENUITEM_START:
+        StartLevel() ;
+        return true ;
+      case MAINMENUITEM_VOLUME:
+        m_musicVolume += 64 ;
+        if ((m_musicVolume > 1024) || (m_musicVolume < 0))
+          m_musicVolume = 1024 ;
+        m_audio->SetMusicVolume(m_musicVolume) ;
+        break ;
+      case MAINMENUITEM_SELECT:
+        ChangeState(GAMESTATE_LEVELSELECT) ;
+        return true;
+    }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_UP))
+  {  
+    m_mainMenuItem = (m_mainMenuItem - 1 + MAINMENUITEM_COUNT) % MAINMENUITEM_COUNT ;
+    ShowMainMenuSelector() ;
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_DOWN))
+  {  
+    m_mainMenuItem = (m_mainMenuItem + 1) % MAINMENUITEM_COUNT ;
+    ShowMainMenuSelector() ;
   }
   return true ;
 }

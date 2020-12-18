@@ -14,6 +14,7 @@ void CGAME::LevelSelect_LeaveState()
 {
   m_mainText->Clear() ;
   m_subText->Clear() ;  
+  DisableAllSprites() ;
 }
 
 void CGAME::UpdateLevelSelectionInfo()
@@ -76,101 +77,81 @@ bool CGAME::LevelSelect_Tick()
     } else
     {
       uint16_t keys = m_input.GetKeysDown() ; ;
-      for (unsigned int key=0;key<sizeof(keys)*8;key++)
+      if (keys & KEY_TOUCH)
       {
-        if (keys & (1 << key))
+        if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
         {
-          switch (1 << key)
+          if ((m_input.GetLastTouchDownPosition().px >= 4*8) && (m_input.GetLastTouchDownPosition().px < 28*8))
           {
-            case KEY_TOUCH:
-              if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
-              {
-                if ((m_input.GetLastTouchDownPosition().px >= 4*8) && (m_input.GetLastTouchDownPosition().px < 28*8))
-                {
-                  if (m_input.GetLastTouchDownPosition().px < 128)
-                  {
-                    // Return
-                    ResetLevelTime() ;
-                    ChangeState(GAMESTATE_MAINMENU) ;                    
-                  } else
-                  {
-                    // Start
-                    ResetLevelTime() ;
-                    m_moves = 0 ;
-                    ChangeState(GAMESTATE_LEVELRUNNING) ;
-                  }
-                }
-              }
-              break;
-            case KEY_DOWN:
-            case KEY_RIGHT:
-              DisableAllSprites() ;
-              m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % GetLevelCountForDifficulty(m_difficulty) ;
-              LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
-              break ;
-            case KEY_LEFT:
-            case KEY_UP:
-              DisableAllSprites() ;
-              if (m_levelIndexInDifficulty)
-                m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % GetLevelCountForDifficulty(m_difficulty) ;
-              else
-                m_levelIndexInDifficulty = GetLevelCountForDifficulty(m_difficulty) - 1;
-              LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
-              break;
-            case KEY_SELECT:
+            if (m_input.GetLastTouchDownPosition().px < 128)
+            {
+              // Return
               ResetLevelTime() ;
-              ChangeState(GAMESTATE_MAINMENU) ;
-              break;
-            case KEY_START:
-            case KEY_A:
-            case KEY_B:
-            case KEY_X:
-            case KEY_Y:
+              ChangeState(GAMESTATE_MAINMENU) ;                    
+            } else
+            {
+              // Start
               ResetLevelTime() ;
-              m_mainText->Clear();
               m_moves = 0 ;
               ChangeState(GAMESTATE_LEVELRUNNING) ;
-              return true;
+            }
           }
         }
       }
-      keys = m_input.GetKeysHeld() ;
-      for (unsigned int key=0;key<sizeof(keys)*8;key++)
+      if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_NEXT))
+      {  
+        DisableAllSprites() ;
+        m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % GetLevelCountForDifficulty(m_difficulty) ;
+        LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
+      }
+      if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_PREVIOUS))
+      {  
+        DisableAllSprites() ;
+        if (m_levelIndexInDifficulty)
+          m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % GetLevelCountForDifficulty(m_difficulty) ;
+        else
+          m_levelIndexInDifficulty = GetLevelCountForDifficulty(m_difficulty) - 1;
+        LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
+      }
+      if (m_input.IsKeyForAlias(keys, KEYALIAS_RETURN))
+      {  
+        ResetLevelTime() ;
+        ChangeState(GAMESTATE_MAINMENU) ;
+      }
+      if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_START))
       {
-        if (keys & (1 << key))
+        ResetLevelTime() ;
+        m_mainText->Clear();
+        m_moves = 0 ;
+        ChangeState(GAMESTATE_LEVELRUNNING) ;
+      }
+      keys = m_input.GetKeysHeld() ;
+      if (keys & KEY_TOUCH)
+      {
+        // Swipe Left & right?
+        int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
+        bool handled = false ;
+        if (moveX > 32)
         {
-          switch (1 << key)
-          {
-            case KEY_TOUCH:
-              {
-                // Swipe Left & right?
-                int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
-                bool handled = false ;
-                if (moveX > 32)
-                {
-                  DisableAllSprites() ;
-                  if (m_levelIndexInDifficulty)
-                    m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % GetLevelCountForDifficulty(m_difficulty) ;
-                  else
-                    m_levelIndexInDifficulty = GetLevelCountForDifficulty(m_difficulty) - 1;
-                  LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
-                  handled = true ;
-                } else if (moveX < -32)
-                {
-                  DisableAllSprites() ;
-                  m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % GetLevelCountForDifficulty(m_difficulty) ;
-                  LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;                  
-                  handled = true ;
-                }
-                if (handled)
-                {
-                  // reset point of touch down, so we will not move it instantly again but use
-                  // the new position as the start of movement
-                  m_input.AccountDrag();
-                }
-              }
-              break;
-          }
+          DisableAllSprites() ;
+          if (m_levelIndexInDifficulty)
+            m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % GetLevelCountForDifficulty(m_difficulty) ;
+          else
+            m_levelIndexInDifficulty = GetLevelCountForDifficulty(m_difficulty) - 1;
+          LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
+          handled = true ;
+        } else if (moveX < -32)
+        {
+          DisableAllSprites() ;
+          m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % GetLevelCountForDifficulty(m_difficulty) ;
+          LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;                  
+          handled = true ;
+        }
+        if (handled)
+        {
+          // reset point of touch down, so we will not move it instantly again but use
+          // the new position as the start of movement
+          m_input.AccountDrag();
         }
       }
     }

@@ -1,6 +1,15 @@
 #include "inputmanager.h"
 #include <nds.h>
 
+CINPUTMANAGER::CINPUTMANAGER()
+{
+  m_keysDown = m_keysHeld = m_keysReleased = 0 ;
+  for (int i=0;gDefaultKeyMapping[i];i+=2)
+  {
+    SetKeyMapping(gDefaultKeyMapping[i], gDefaultKeyMapping[i+1]) ;
+  }
+}
+
 void CINPUTMANAGER::Tick() 
 {
   scanKeys();
@@ -168,3 +177,19 @@ void CINPUTMANAGER::RemoveHandler(uint8_t eventType, uint16_t filter, keyhandler
   }
 }
     
+void CINPUTMANAGER::SetKeyMapping(uint16_t alias, uint16_t keys)
+{
+  m_mapping[alias] = keys ;
+}
+
+uint16_t CINPUTMANAGER::GetKeyMapping(uint16_t alias) 
+{
+ if (m_mapping.find(alias) == m_mapping.end())
+    return 0 ;
+ return m_mapping[alias];
+}
+
+bool CINPUTMANAGER::IsKeyForAlias(uint16_t key, uint16_t alias) 
+{
+  return key & GetKeyMapping(alias) ;
+}

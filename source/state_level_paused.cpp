@@ -33,43 +33,38 @@ bool CGAME::LevelPaused_Tick()
     ChangeState(GAMESTATE_LEVELWON) ;
     return true ;
   }
-  for (unsigned int key=0;key<sizeof(keys)*8;key++)
+  if (keys & KEY_TOUCH)
   {
-    if (keys & (1 << key))
+    if ((m_input.GetLastTouchPosition().py >= 6*16+8) && (m_input.GetLastTouchPosition().py < 8*16+8))
     {
-      switch (1 << key)
+      if ((m_input.GetLastTouchPosition().px >= 4*8) && (m_input.GetLastTouchPosition().px < 28*8))
       {
-        case KEY_TOUCH:
-          if ((m_input.GetLastTouchPosition().py >= 6*16+8) && (m_input.GetLastTouchPosition().py < 8*16+8))
-          {
-            if ((m_input.GetLastTouchPosition().px >= 4*8) && (m_input.GetLastTouchPosition().px < 28*8))
-            {
-              if (m_input.GetLastTouchPosition().px < 128)
-              {
-                // Return
-                ResetLevelTime() ;
-                UnloadLevel() ;
-                ChangeState(GAMESTATE_MAINMENU) ;   
-                return true ;                 
-              } else
-              {
-                // Resume
-                ChangeState(GAMESTATE_LEVELRUNNING) ;
-              }
-            }
-          }
-          break;
-        case KEY_SELECT:
-          // Return to main menu
+        if (m_input.GetLastTouchPosition().px < 128)
+        {
+          // Return
           ResetLevelTime() ;
           UnloadLevel() ;
-          ChangeState(GAMESTATE_MAINMENU) ;                    
-          break;
-        case KEY_START:
+          ChangeState(GAMESTATE_MAINMENU) ;   
+          return true ;                 
+        } else
+        {
+          // Resume
           ChangeState(GAMESTATE_LEVELRUNNING) ;
-          return true;
+        }
       }
     }
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_RETURN))
+  { 
+    ResetLevelTime() ;
+    UnloadLevel() ;
+    ChangeState(GAMESTATE_MAINMENU) ;  
+    return true;
+  }
+  if (m_input.IsKeyForAlias(keys, KEYALIAS_PAUSE))
+  {
+    ChangeState(GAMESTATE_LEVELRUNNING) ;
+    return true;
   }
   UpdateCarsOnScreen();
   UpdateLevelStats() ;
