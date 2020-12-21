@@ -106,28 +106,6 @@ void CGAME::Initialize()
   ChangeState(GAMESTATE_LOADING);
 } 
 
-void CGAME::IncreaseDifficulty()
-{
-  switch (m_difficulty)
-  {
-    case eBEGINNER:     m_difficulty = eINTERMEDIATE; break;
-    case eINTERMEDIATE: m_difficulty = eADVANCED; break;
-    case eADVANCED:     m_difficulty = eEXPERT; break;
-    case eEXPERT:       m_difficulty = eBEGINNER; break;
-  }
-}
-
-void CGAME::DecreaseDifficulty()
-{
-  switch (m_difficulty)
-  {
-    case eBEGINNER:     m_difficulty = eEXPERT; break;
-    case eINTERMEDIATE: m_difficulty = eBEGINNER; break;
-    case eADVANCED:     m_difficulty = eINTERMEDIATE; break;
-    case eEXPERT:       m_difficulty = eADVANCED; break;
-  }
-}
-
 void CGAME::Destruct()
 {
 }

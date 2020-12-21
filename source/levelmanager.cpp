@@ -228,6 +228,28 @@ void CLEVELMANAGER::ResetLevel()
   m_selectedCar = 0 ;
 }
 
+void CLEVELMANAGER::IncreaseDifficulty()
+{
+  switch (m_difficulty)
+  {
+    case eBEGINNER:     m_difficulty = eINTERMEDIATE; break;
+    case eINTERMEDIATE: m_difficulty = eADVANCED; break;
+    case eADVANCED:     m_difficulty = eEXPERT; break;
+    case eEXPERT:       m_difficulty = eBEGINNER; break;
+  }
+}
+
+void CLEVELMANAGER::DecreaseDifficulty()
+{
+  switch (m_difficulty)
+  {
+    case eBEGINNER:     m_difficulty = eEXPERT; break;
+    case eINTERMEDIATE: m_difficulty = eBEGINNER; break;
+    case eADVANCED:     m_difficulty = eINTERMEDIATE; break;
+    case eEXPERT:       m_difficulty = eADVANCED; break;
+  }
+}
+
 void CLEVELMANAGER::SelectNextCarLeft() 
 {
   uint8_t row = m_carData[m_selectedCar].y ;

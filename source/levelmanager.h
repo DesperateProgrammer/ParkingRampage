@@ -18,6 +18,8 @@ typedef class CLEVELMANAGER
     uint8_t levelOffsetX = 0 ;
     uint8_t levelOffsetY = 0 ;
     
+    EDIFFICULTY m_difficulty = eBEGINNER ;
+    
     SLEVELENTITY m_carData[CARCOUNT_MAX];
     uint8_t m_carCount = 0 ;
 
@@ -80,7 +82,9 @@ typedef class CLEVELMANAGER
     
     uint32_t GetCurrentLevelTime() ;
     
-
+    void IncreaseDifficulty() ;
+    void DecreaseDifficulty() ;
     
+    EDIFFICULTY GetDifficulty() { return m_difficulty; };    
 
 } CLEVELMANAGER ;

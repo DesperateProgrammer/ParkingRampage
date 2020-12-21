@@ -30,7 +30,7 @@ void CLEVELSELECTSTATE::UpdateLevelSelectionInfo()
   char buffer[32] ;
   char *diffText = 0;
   uint8_t pal = 0 ;
-  switch (m_game->GetDifficulty())
+  switch (m_game->GetLevelManager()->GetDifficulty())
   {
     case eBEGINNER:
       diffText = (char *)"BEGINNER" ;
@@ -70,11 +70,11 @@ bool CLEVELSELECTSTATE::OnTick()
     {
       /* find a level */
       srand(m_game->GetTimeManager()->GetTimerTicks()) ;
-      uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
+      uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
       m_levelIndexInDifficulty = 0 ;
       if (diffCnt)
       {
-        uint16_t level = m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty) ;
+        uint16_t level = m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty) ;
         m_game->GetLevelManager()->LoadLevel(level)  ;
       } else
       {
@@ -108,17 +108,17 @@ bool CLEVELSELECTSTATE::OnTick()
       if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_NEXT))
       {  
         m_game->DisableAllSprites() ;
-        m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
-        m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;
+        m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
+        m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty)) ;
       }
       if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_PREVIOUS))
       {  
         m_game->DisableAllSprites() ;
         if (m_levelIndexInDifficulty)
-          m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
+          m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
         else
-          m_levelIndexInDifficulty = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) - 1;
-        m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;
+          m_levelIndexInDifficulty = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) - 1;
+        m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty)) ;
       }
       if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_RETURN))
       {  
@@ -142,16 +142,16 @@ bool CLEVELSELECTSTATE::OnTick()
         {
           m_game->DisableAllSprites() ;
           if (m_levelIndexInDifficulty)
-            m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
+            m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
           else
-            m_levelIndexInDifficulty = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) - 1;
-          m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;
+            m_levelIndexInDifficulty = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) - 1;
+          m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty)) ;
           handled = true ;
         } else if (moveX < -32)
         {
           m_game->DisableAllSprites() ;
-          m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
-          m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;                  
+          m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
+          m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty)) ;                  
           handled = true ;
         }
         if (handled)

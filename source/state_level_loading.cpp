@@ -24,10 +24,10 @@ bool CLEVELLOADINGSTATE::OnTick()
       
       /* find a level */
       srand(m_game->GetTimeManager()->GetTimerTicks()) ;
-      uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
+      uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
       if (diffCnt)
       {
-        uint16_t level = m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), rand() % diffCnt) ;
+        uint16_t level = m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), rand() % diffCnt) ;
         m_game->GetLevelManager()->LoadLevel(level)  ;
       } else
       {

@@ -83,11 +83,6 @@ typedef class CGAME : public CSTATEMACHINE
     
     
     
-    /* Level Selection & Search */
-    EDIFFICULTY m_difficulty = eBEGINNER ;
-                
-    
-    
     /* Sprites */
     uint16_t *m_spriteContent[16];
     void LoadCarSprites() ;
@@ -137,11 +132,6 @@ typedef class CGAME : public CSTATEMACHINE
     bool IsRotScaling(uint8_t screen) ;
     
     void DisableAllSprites() ;
-    void IncreaseDifficulty() ;
-    void DecreaseDifficulty() ;
-    
-    EDIFFICULTY GetDifficulty() { return m_difficulty; };
-
     
     uint16_t *GetSpriteLocation(uint8_t num) { return m_spriteContent[num] ; };
     

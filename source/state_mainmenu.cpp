@@ -58,7 +58,7 @@ bool CMAINMENUSTATE::OnTick()
         switch (m_mainMenuItem)
         {
           case MAINMENUITEM_DIFFICULTY:
-            m_game->IncreaseDifficulty();
+            m_game->GetLevelManager()->IncreaseDifficulty();
             ShowMainMenuDifficulty();
             break;
           case MAINMENUITEM_VOLUME:
@@ -96,7 +96,7 @@ bool CMAINMENUSTATE::OnTick()
     switch (m_mainMenuItem)
     {
       case MAINMENUITEM_DIFFICULTY:
-        m_game->DecreaseDifficulty();
+        m_game->GetLevelManager()->DecreaseDifficulty();
         ShowMainMenuDifficulty();
         break;
       case MAINMENUITEM_VOLUME:
@@ -120,7 +120,7 @@ bool CMAINMENUSTATE::OnTick()
     switch (m_mainMenuItem)
     {
       case MAINMENUITEM_DIFFICULTY:
-        m_game->IncreaseDifficulty();
+        m_game->GetLevelManager()->IncreaseDifficulty();
         ShowMainMenuDifficulty();
         break;
       case MAINMENUITEM_START:
@@ -170,7 +170,7 @@ void CMAINMENUSTATE::ShowMainMenuDifficulty()
 {
   char *diffText = 0;
   uint8_t pal = 0 ;
-  switch (m_game->GetDifficulty())
+  switch (m_game->GetLevelManager()->GetDifficulty())
   {
     case eBEGINNER:
       diffText = (char *)"  BEGINNER  " ;
