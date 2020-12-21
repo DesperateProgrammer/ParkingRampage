@@ -21,32 +21,26 @@ void CGAME::Run()
   Destruct();
 }
 
-#define CONCAT(a,b,c,d) a##b##c##d
-
-#define LOADSPRITE(id, width, height, offset) \
-  m_spriteContent[id] = oamAllocateGfx(&oamSub, CONCAT(SpriteSize_,width,x,height), SpriteColorFormat_256Color);\
-	dmaCopy((uint8_t*)spriteTiles + (offset), m_spriteContent[id], width*height)
-
 void CGAME::LoadCarSprites()
 {
   // Cars, Length 2
-  LOADSPRITE(SPRITE_CAR_A,16,32,0) ;
-  LOADSPRITE(SPRITE_CAR_TARGET,16,32,16*32) ;
-  LOADSPRITE(SPRITE_CAR_B,16,32,6*16*32) ;
-  LOADSPRITE(SPRITE_CAR_C,16,32,7*16*32) ;
+  m_subSprites->LoadSprite(SPRITE_CAR_A, (uint8_t*)spriteTiles + 0*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_CAR_TARGET, (uint8_t*)spriteTiles + 1*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_CAR_B, (uint8_t*)spriteTiles + 6*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_CAR_C, (uint8_t*)spriteTiles + 7*16*32, 16*32, SpriteSize_16x32) ;
   // Trucks, Length 3 in 2 parts
-  LOADSPRITE(SPRITE_TRUCK_A_1,16,32,2*16*32) ;
-  LOADSPRITE(SPRITE_TRUCK_A_2,16,16,8*16*32) ;
-  LOADSPRITE(SPRITE_TRUCK_B_1,16,32,3*16*32) ;
-  LOADSPRITE(SPRITE_TRUCK_B_2,16,16,9*16*32) ;
+  m_subSprites->LoadSprite(SPRITE_TRUCK_A_1, (uint8_t*)spriteTiles + 2*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_TRUCK_A_2, (uint8_t*)spriteTiles + 8*16*32, 16*16, SpriteSize_16x16) ;
+  m_subSprites->LoadSprite(SPRITE_TRUCK_B_1, (uint8_t*)spriteTiles + 3*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_TRUCK_B_2, (uint8_t*)spriteTiles + 9*16*32, 16*16, SpriteSize_16x16) ;    
   // Bus, Length 4, Needs 2 Parts
-  LOADSPRITE(SPRITE_BUS_1,16,32,4*16*32) ;
-  LOADSPRITE(SPRITE_BUS_2,16,32,10*16*32) ;
+  m_subSprites->LoadSprite(SPRITE_BUS_1, (uint8_t*)spriteTiles + 4*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_BUS_2, (uint8_t*)spriteTiles + 10*16*32, 16*32, SpriteSize_16x32) ;
   // Tank Truck, Length 4, Needs 2 Parts
-  LOADSPRITE(SPRITE_TANKTRUCK_1,16,32,5*16*32) ;
-  LOADSPRITE(SPRITE_TANKTRUCK_2,16,32,11*16*32) ;
+  m_subSprites->LoadSprite(SPRITE_TANKTRUCK_1, (uint8_t*)spriteTiles + 5*16*32, 16*32, SpriteSize_16x32) ;
+  m_subSprites->LoadSprite(SPRITE_TANKTRUCK_2, (uint8_t*)spriteTiles + 11*16*32, 16*32, SpriteSize_16x32) ;
   // Car Select Cursor
-  LOADSPRITE(SPRITE_SELECTOR,16,16,8*16*32 + 1*16*16) ;
+  m_subSprites->LoadSprite(SPRITE_SELECTOR, (uint8_t*)spriteTiles + 8*16*32 + 1*16*16, 16*16, SpriteSize_16x16) ;    
 }
 
 
@@ -88,11 +82,11 @@ void CGAME::Initialize()
   oamInit(&oamSub, SpriteMapping_1D_128, false);
 	dmaCopy(spritePal, SPRITE_PALETTE_SUB, 512);
   
+  m_mainSprites = new CSPRITEMANAGER(0) ;
+  m_subSprites = new CSPRITEMANAGER(1)  ;
+  
   LoadCarSprites();
-  
-  /* 90° rotation matrix */
-  oamRotateScale(&oamSub, 0, degreesToAngle(90), intToFixed(1, 8), intToFixed(1, 8));
-  
+    
   m_levelManager = new CLEVELMANAGER(this) ;
 
   m_audio = CAUDIOSTREAMING::GetInstance() ;
@@ -108,16 +102,6 @@ void CGAME::Initialize()
 
 void CGAME::Destruct()
 {
-}
-
-
-void CGAME::DisableAllSprites() 
-{
-  for (uint8_t i = 0;i<128;i++)
-  {
-    oamClearSprite(&oamSub, i);
-  }
-  oamUpdate(&oamSub);  
 }
 
 void CGAME::OnEveryTick()

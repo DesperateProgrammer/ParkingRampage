@@ -25,7 +25,7 @@ bool CLEVELWONSTATE::OnLeave()
 {
   m_game->GetMainText()->Clear() ;
   m_game->GetSubText()->Clear() ;  
-  m_game->DisableAllSprites() ;
+  m_game->GetSubSprites()->DisableAll() ;
   return true ;
 }
 

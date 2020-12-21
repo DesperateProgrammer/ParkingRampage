@@ -15,6 +15,7 @@
 #include "levelmanager.h"
 #include "inputmanager.h"
 #include "timemanager.h"
+#include "spritemanager.h"
 #include "statemachine.h"
 #include <stdint.h>
 
@@ -78,13 +79,14 @@ typedef class CGAME : public CSTATEMACHINE
     /* Text background */
     CTEXTOVERLAY *m_mainText ;
     CTEXTOVERLAY *m_subText ;
+    /* Sprites */
+    CSPRITEMANAGER *m_mainSprites ;
+    CSPRITEMANAGER *m_subSprites ;
     /* Level */
     class CLEVELMANAGER *m_levelManager ;
     
-    
-    
+
     /* Sprites */
-    uint16_t *m_spriteContent[16];
     void LoadCarSprites() ;
 
     /* Effects */
@@ -119,7 +121,9 @@ typedef class CGAME : public CSTATEMACHINE
     CTEXTOVERLAY *GetMainText() { return m_mainText ;} ;
     CTEXTOVERLAY *GetSubText() { return m_subText ;} ;
     CLEVELMANAGER *GetLevelManager() { return m_levelManager; } ;
-    CTIMEMANAGER *GetTimeManager() { return m_time; };
+    CTIMEMANAGER *GetTimeManager() { return m_time; };    
+    CSPRITEMANAGER *GetMainSprites() { return m_mainSprites ; };
+    CSPRITEMANAGER *GetSubSprites() { return m_subSprites ; };
 
     
     /* Effects */
@@ -130,9 +134,5 @@ typedef class CGAME : public CSTATEMACHINE
     /* Rotate out/Rotate in */
     void StartRotScale(uint8_t screen, uint32_t timespan, int16_t rotations, uint16_t startScale, uint16_t endScale) ;
     bool IsRotScaling(uint8_t screen) ;
-    
-    void DisableAllSprites() ;
-    
-    uint16_t *GetSpriteLocation(uint8_t num) { return m_spriteContent[num] ; };
     
 } CGAME, LPCGAME;

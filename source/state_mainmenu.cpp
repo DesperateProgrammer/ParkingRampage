@@ -36,7 +36,7 @@ bool CMAINMENUSTATE::OnLeave()
 {
   m_game->GetSubText()->Clear() ;
   m_game->GetMainText()->Clear() ;
-  m_game->DisableAllSprites() ;
+  m_game->GetSubSprites()->DisableAll() ;
   return true ;
 }
 
@@ -203,9 +203,7 @@ void CMAINMENUSTATE::ShowMainMenuStart()
 void CMAINMENUSTATE::ShowMainMenuSelector()
 {
   int32_t scale = sinLerp(m_game->GetTimeManager()->GetTimerTicks()*70);
-  oamSet(&oamSub, 0, 2*2*8 + scale * 8 / 4096, 2*2*8 - 25 + 4*8*m_mainMenuItem, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-        m_game->GetSpriteLocation(SPRITE_CAR_TARGET), 0, true, false, false, false, false);
-  oamSet(&oamSub, 1, 12*2*8 - scale * 8 / 4096, 2*2*8 - 25 + 4*8*m_mainMenuItem, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-        m_game->GetSpriteLocation(SPRITE_CAR_TARGET), 0, true, false, false, false, false);
-  oamUpdate(&oamSub);  
+  m_game->GetSubSprites()->SetSprite(0, SPRITE_CAR_TARGET, 2*2*8 + scale * 8 / 4096, 2*2*8 + 4*8*m_mainMenuItem, ORIENTATION_RIGHT) ;
+  m_game->GetSubSprites()->SetSprite(1, SPRITE_CAR_TARGET, 12*2*8 - scale * 8 / 4096, 2*2*8 + 4*8*m_mainMenuItem, ORIENTATION_LEFT) ;
+  m_game->GetSubSprites()->Update() ;
 }

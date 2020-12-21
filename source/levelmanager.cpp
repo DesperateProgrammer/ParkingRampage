@@ -128,8 +128,9 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
     uint32_t time = m_game->GetTimeManager()->GetTimerTicks() ;
     uint32_t scale = (1 << (12 + 8)) / (2*sinLerp(time *50)) ;
     oamRotateScale(&oamSub, 1, 0, scale, scale) ;
+    
     oamSet(&oamSub, 0, selectorX, selectorY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
-         m_game->GetSpriteLocation(SPRITE_SELECTOR), 1, true, false, true, true, false);
+         m_game->GetSubSprites()->GetSpriteSource(SPRITE_SELECTOR), 1, true, false, true, true, false);
   }
 
 
@@ -146,37 +147,20 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
     {
       case 2:
         {
-          uint16_t *dataA = 0, *dataB = 0 ;
-          switch (m_carData[i].specials)
-          {
-            case 0:
-            case 1:
-              dataA =  m_game->GetSpriteLocation(SPRITE_TRUCK_1(m_carData[i].specials));
-              dataB =  m_game->GetSpriteLocation(SPRITE_TRUCK_2(m_carData[i].specials));
-              break;
-            default:
-              continue;
-          }
           switch (m_carData[i].orientation)
           {
             case ORIENTATION_DOWN:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    dataA, -1, false, false, false, false, false);
-              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY+2)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
-                    dataB, -1, false, false, false, false, false);
+              m_game->GetSubSprites()->SetSprite(i*2+1, SPRITE_TRUCK_1(m_carData[i].specials), (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
+              m_game->GetSubSprites()->SetSprite(i*2+2, SPRITE_TRUCK_2(m_carData[i].specials), (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY+2)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
               break;
             case ORIENTATION_UP:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY+1)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    dataA, -1, false, false, true, true, false);
-              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY+0)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
-                    dataB, -1, false, false, true, true, false);
+              m_game->GetSubSprites()->SetSprite(i*2+1, SPRITE_TRUCK_1(m_carData[i].specials), (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY+1)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
+              m_game->GetSubSprites()->SetSprite(i*2+2, SPRITE_TRUCK_2(m_carData[i].specials), (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
               break;
             case ORIENTATION_RIGHT:
             case ORIENTATION_LEFT:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 25 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    dataA, 0, true, false, false, false, false);
-              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX+2)*16 + 48-8 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 9 + moveOffsetY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
-                    dataB, 0, true, false, false, false, false);
+              m_game->GetSubSprites()->SetSprite(i*2+1, SPRITE_TRUCK_1(m_carData[i].specials), (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
+              m_game->GetSubSprites()->SetSprite(i*2+2, SPRITE_TRUCK_2(m_carData[i].specials), (m_carData[i].x+levelOffsetX+2)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
               break;
               
           }
@@ -184,42 +168,12 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
         break;
       case 1:
         {
-          uint16_t *data = 0 ;
-          switch (m_carData[i].specials)
-          {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-              data = m_game->GetSpriteLocation(SPRITE_CAR(m_carData[i].specials));
-              break;
-            default:
-              continue;
-          }
-          switch (m_carData[i].orientation)
-          {
-            case 0:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    data, -1, false, false, false, false, false);
-              break;
-            case 1:		
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 25 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    data, 0, true, false, false, false, false);
-              break;
-            case 2:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    data, -1, false, false, true, true, false);
-              break;
-            case 3:		
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 25 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-                    data, 0, true, false, true, true, false);
-              break;
-          } 
+          m_game->GetSubSprites()->SetSprite(i*2+1, SPRITE_CAR(m_carData[i].specials), (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX,  (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, m_carData[i].orientation) ;
           break;
         }
     }
   }  
-  oamUpdate(&oamSub);  
+  m_game->GetSubSprites()->Update() ; 
 }
 
 void CLEVELMANAGER::ResetLevel() 

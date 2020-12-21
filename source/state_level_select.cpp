@@ -13,7 +13,7 @@ bool CLEVELSELECTSTATE::OnEnter()
 {
   m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, 0) ;
   m_game->GetSubText()->Clear() ;
-  m_game->DisableAllSprites() ;
+  m_game->GetSubSprites()->DisableAll() ;
   return true ;
 }
 
@@ -21,7 +21,7 @@ bool CLEVELSELECTSTATE::OnLeave()
 {
   m_game->GetMainText()->Clear() ;
   m_game->GetSubText()->Clear() ;  
-  m_game->DisableAllSprites() ;
+  m_game->GetSubSprites()->DisableAll() ;
   return true ;
 }
 
@@ -107,13 +107,13 @@ bool CLEVELSELECTSTATE::OnTick()
       }
       if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_NEXT))
       {  
-        m_game->DisableAllSprites() ;
+        m_game->GetSubSprites()->DisableAll() ;
         m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
         m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty)) ;
       }
       if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_PREVIOUS))
       {  
-        m_game->DisableAllSprites() ;
+        m_game->GetSubSprites()->DisableAll() ;
         if (m_levelIndexInDifficulty)
           m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
         else
@@ -140,7 +140,7 @@ bool CLEVELSELECTSTATE::OnTick()
         bool handled = false ;
         if (moveX > 32)
         {
-          m_game->DisableAllSprites() ;
+          m_game->GetSubSprites()->DisableAll() ;
           if (m_levelIndexInDifficulty)
             m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
           else
@@ -149,7 +149,7 @@ bool CLEVELSELECTSTATE::OnTick()
           handled = true ;
         } else if (moveX < -32)
         {
-          m_game->DisableAllSprites() ;
+          m_game->GetSubSprites()->DisableAll() ;
           m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetLevelManager()->GetDifficulty()) ;
           m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetLevelManager()->GetDifficulty(), m_levelIndexInDifficulty)) ;                  
           handled = true ;
