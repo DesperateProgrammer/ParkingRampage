@@ -108,7 +108,14 @@ bool CLEVELRUNNINGSTATE::OnTick()
       // reset point of touch down, so we will not move it instantly again but use
       // the new position as the start of movement
       m_game->GetInputManager()->AccountDrag() ;
+      m_game->GetLevelManager()->SetPartialMove(0,0) ;
+    } else
+    {
+      m_game->GetLevelManager()->SetPartialMove(-moveX, -moveY) ;
     }
+  } else
+  {
+    m_game->GetLevelManager()->SetPartialMove(0, 0) ;
   }
   m_game->GetLevelManager()->UpdateCarsOnScreen();
   m_game->GetLevelManager()->UpdateLevelStats() ;

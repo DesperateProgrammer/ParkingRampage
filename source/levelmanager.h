@@ -22,6 +22,8 @@ typedef class CLEVELMANAGER
     uint8_t m_carCount = 0 ;
 
     uint8_t m_selectedCar = 0;
+    int8_t  m_selectedMoveOffsetX = 0 ;
+    int8_t  m_selectedMoveOffsetY = 0 ;    
     
     uint16_t m_moves = 0 ;
     
@@ -62,6 +64,8 @@ typedef class CLEVELMANAGER
     void MoveRight() ;
     void MoveUp() ;
     void MoveDown() ;
+    
+    void SetPartialMove(int mx, int my) ;
 
     uint8_t GetOccupyingCar(uint8_t x, uint8_t y) ;
     bool SelectCarFromTouch(touchPosition touch) ;

@@ -62,9 +62,9 @@ typedef class CGAME : public CSTATEMACHINE
     /* Singleton */
     static class CGAME *m_instance ;
 
+    /* State machine */
     void Initialize() ;
-    void Destruct() ;
-    
+    void Destruct() ;    
     virtual void OnEveryTick() ;
             
     
@@ -111,18 +111,19 @@ typedef class CGAME : public CSTATEMACHINE
 
     void UpdateRotScale(uint8_t screen) ;
     
-    /* Level Running/Paused/Won methods */
-    
   public:
+    /* Singleton */
+    static class CGAME *GetInstance() { return m_instance; };
+
+    /* State Machine */
     void Run();
     
-    static class CGAME *GetInstance() { return m_instance; };
-    
+    /* Get Various Managers */
     CINPUTMANAGER *GetInputManager() { return &m_input ; } ;
     CAUDIOSTREAMING * GetAudio() { return m_audio; };
     CTEXTOVERLAY *GetMainText() { return m_mainText ;} ;
     CTEXTOVERLAY *GetSubText() { return m_subText ;} ;
-    class CLEVELMANAGER *GetLevelManager() { return m_levelManager; } ;
+    CLEVELMANAGER *GetLevelManager() { return m_levelManager; } ;
     CTIMEMANAGER *GetTimeManager() { return m_time; };
 
     
@@ -144,7 +145,4 @@ typedef class CGAME : public CSTATEMACHINE
     
     uint16_t *GetSpriteLocation(uint8_t num) { return m_spriteContent[num] ; };
     
-
-
-
 } CGAME, LPCGAME;

@@ -111,6 +111,8 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
   {
     // and draw the selector
     uint16_t selectorX = 40 + levelOffsetX * 16 + m_carData[m_selectedCar].x * 16, selectorY = 8 + levelOffsetY * 16 + m_carData[m_selectedCar].y * 16;
+    selectorX += m_selectedMoveOffsetX ;
+    selectorY += m_selectedMoveOffsetY ;
     switch (m_carData[m_selectedCar].orientation)
     {
       case ORIENTATION_LEFT:
@@ -130,8 +132,16 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
          m_game->GetSpriteLocation(SPRITE_SELECTOR), 1, true, false, true, true, false);
   }
 
+
   for (int i=0;i<16;i++)
   {
+    int moveOffsetX = 0 ;
+    int moveOffsetY = 0 ;
+    if (i == m_selectedCar)
+    {
+      moveOffsetX = m_selectedMoveOffsetX ;
+      moveOffsetY = m_selectedMoveOffsetY ;
+    }
     switch (m_carData[i].size)
     {
       case 2:
@@ -150,22 +160,22 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
           switch (m_carData[i].orientation)
           {
             case ORIENTATION_DOWN:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY)*16 + 16, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     dataA, -1, false, false, false, false, false);
-              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY+2)*16 + 16, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY+2)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
                     dataB, -1, false, false, false, false, false);
               break;
             case ORIENTATION_UP:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY+1)*16 + 16, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY+1)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     dataA, -1, false, false, true, true, false);
-              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY+0)*16 + 16, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY+0)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
                     dataB, -1, false, false, true, true, false);
               break;
             case ORIENTATION_RIGHT:
             case ORIENTATION_LEFT:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY)*16 + 16 - 25, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 25 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     dataA, 0, true, false, false, false, false);
-              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX+2)*16 + 48-8, (m_carData[i].y+levelOffsetY)*16 + 16 - 9, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+2, (m_carData[i].x+levelOffsetX+2)*16 + 48-8 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 9 + moveOffsetY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
                     dataB, 0, true, false, false, false, false);
               break;
               
@@ -189,19 +199,19 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
           switch (m_carData[i].orientation)
           {
             case 0:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY)*16 + 16, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     data, -1, false, false, false, false, false);
               break;
             case 1:		
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY)*16 + 16 - 25, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 25 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     data, 0, true, false, false, false, false);
               break;
             case 2:
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY)*16 + 16, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     data, -1, false, false, true, true, false);
               break;
             case 3:		
-              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48, (m_carData[i].y+levelOffsetY)*16 + 16 - 25, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
+              oamSet(&oamSub, i*2+1, (m_carData[i].x+levelOffsetX)*16 + 48 + moveOffsetX, (m_carData[i].y+levelOffsetY)*16 + 16 - 25 + moveOffsetY, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
                     data, 0, true, false, true, true, false);
               break;
           } 
@@ -449,6 +459,22 @@ bool CLEVELMANAGER::IsLevelWon()
   return GetOccupyingCar(levelWidth, (levelHeight / 2) - 1) != 0xff ;
 }
 
+void CLEVELMANAGER::SetPartialMove(int mx, int my) 
+{
+  if (!mx && !my)
+  {
+    m_selectedMoveOffsetX = m_selectedMoveOffsetY = 0 ;
+    return ;
+  }
+  if ((mx > 0) && (CanMoveRight()))
+    m_selectedMoveOffsetX = mx ;
+  if ((mx < 0) && (CanMoveLeft()))
+    m_selectedMoveOffsetX = mx ;
+  if ((my > 0) && (CanMoveDown()))
+    m_selectedMoveOffsetY = my ;
+  if ((my < 0) && (CanMoveUp()))
+    m_selectedMoveOffsetY = my ;
+}
 
 bool CLEVELMANAGER::CanMoveLeft() 
 {
