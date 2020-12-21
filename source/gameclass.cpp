@@ -75,7 +75,7 @@ void CGAME::Initialize()
     m_rotations[screen] = 0 ;
   }
   
-  InitializeTime() ;
+  m_time = new CTIMEMANAGER() ;
 
 
   videoSetModeSub(MODE_2_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG3_ACTIVE);

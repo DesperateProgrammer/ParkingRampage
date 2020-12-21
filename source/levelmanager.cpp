@@ -123,7 +123,7 @@ void CLEVELMANAGER::UpdateCarsOnScreen(bool selectorShown)
         break;
     }
     // the selector will have some heartbeat scaling
-    uint32_t time = m_game->GetTimerTicks() ;
+    uint32_t time = m_game->GetTimeManager()->GetTimerTicks() ;
     uint32_t scale = (1 << (12 + 8)) / (2*sinLerp(time *50)) ;
     oamRotateScale(&oamSub, 1, 0, scale, scale) ;
     oamSet(&oamSub, 0, selectorX, selectorY, 0, 0, SpriteSize_16x16, SpriteColorFormat_256Color, 
@@ -547,7 +547,7 @@ void CLEVELMANAGER::MoveDown()
 uint32_t CLEVELMANAGER::GetCurrentLevelTime()
 {
   if (m_timeOfResume)
-    return m_levelTime + (m_game->GetTimerTicks() - m_timeOfResume) ;
+    return m_levelTime + (m_game->GetTimeManager()->GetTimerTicks() - m_timeOfResume) ;
   else
     return m_levelTime ;
 }
@@ -567,6 +567,6 @@ void CLEVELMANAGER::PauseLevelTime()
 
 void CLEVELMANAGER::ContinueLevelTime() 
 {
-  m_timeOfResume = m_game->GetTimerTicks() ;
+  m_timeOfResume = m_game->GetTimeManager()->GetTimerTicks() ;
 }
     

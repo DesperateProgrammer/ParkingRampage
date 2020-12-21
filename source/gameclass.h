@@ -14,6 +14,7 @@
 #include "audiostreaming.h"
 #include "levelmanager.h"
 #include "inputmanager.h"
+#include "timemanager.h"
 #include "statemachine.h"
 #include <stdint.h>
 
@@ -65,31 +66,29 @@ typedef class CGAME : public CSTATEMACHINE
     void Destruct() ;
     
     virtual void OnEveryTick() ;
-        
+            
+    
+    /* Various managers */
     /* Time */
-    static volatile uint32_t m_timeTicks ;    // time counter roughly 1ms/bit
-    
-    static void TimerTick() ;
-    void InitializeTime() ;
-    
-    
-    /* Input */
+    CTIMEMANAGER *m_time ;
+    /* Input (Key + Touch) */
     CINPUTMANAGER m_input ;
-    
-    /* Level Selection & Search */
-    EDIFFICULTY m_difficulty = eBEGINNER ;
-    class CLEVELMANAGER *m_levelManager ;
-                
-    
     /* Audio */
-    CAUDIOSTREAMING *m_audio ;
-        
+    CAUDIOSTREAMING *m_audio ;        
     /* Text background */
     CTEXTOVERLAY *m_mainText ;
     CTEXTOVERLAY *m_subText ;
+    /* Level */
+    class CLEVELMANAGER *m_levelManager ;
+    
+    
+    
+    /* Level Selection & Search */
+    EDIFFICULTY m_difficulty = eBEGINNER ;
+                
+    
     
     /* Sprites */
-    /* Car data */
     uint16_t *m_spriteContent[16];
     void LoadCarSprites() ;
 
@@ -124,6 +123,7 @@ typedef class CGAME : public CSTATEMACHINE
     CTEXTOVERLAY *GetMainText() { return m_mainText ;} ;
     CTEXTOVERLAY *GetSubText() { return m_subText ;} ;
     class CLEVELMANAGER *GetLevelManager() { return m_levelManager; } ;
+    CTIMEMANAGER *GetTimeManager() { return m_time; };
 
     
     /* Effects */
@@ -144,7 +144,7 @@ typedef class CGAME : public CSTATEMACHINE
     
     uint16_t *GetSpriteLocation(uint8_t num) { return m_spriteContent[num] ; };
     
-    uint32_t GetTimerTicks() ;
+
 
 
 } CGAME, LPCGAME;

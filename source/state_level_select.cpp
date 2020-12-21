@@ -69,7 +69,7 @@ bool CLEVELSELECTSTATE::OnTick()
     if (m_game->GetFadeMode(SCREEN_BOTTOM) == eFADEOUT)
     {
       /* find a level */
-      srand(m_game->GetTimerTicks()) ;
+      srand(m_game->GetTimeManager()->GetTimerTicks()) ;
       uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
       m_levelIndexInDifficulty = 0 ;
       if (diffCnt)
