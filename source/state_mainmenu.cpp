@@ -1,10 +1,19 @@
 #include "gameclass.h"
 #include <nds.h>
 #include <stdio.h>
+#include "state_mainmenu.h"
+#include "mainmenu.h"
 
-void CGAME::MainMenu_EnterState()
+CMAINMENUSTATE::CMAINMENUSTATE(CGAME *game) 
 {
-  StartFade(1, eFADEIN, MAINMENU_FADETIME) ;
+  m_game = game ;
+  m_game->GetAudio()->SetMusicVolume(m_musicVolume) ;
+  m_mainMenuTiles = new CTILEMAP(1, (uint16_t *)mainmenuTiles, mainmenuTilesLen, (uint16_t *)mainmenuPal, mainmenuPalLen, (uint16_t *)mainmenuMap, mainmenuMapLen) ;
+}
+
+bool CMAINMENUSTATE::OnEnter()
+{
+  m_game->StartFade(1, eFADEIN, MAINMENU_FADETIME) ;
   m_mainMenuTiles->Initialize() ;        
   for (int i=0;i<16;i++)
   {
@@ -20,24 +29,26 @@ void CGAME::MainMenu_EnterState()
   ShowMainMenuDifficulty();
   ShowMainMenuStart() ;
   ShowMainMenuSelector() ;
+  return true ;
 }
 
-void CGAME::MainMenu_LeaveState()
+bool CMAINMENUSTATE::OnLeave()
 {
-  m_subText->Clear() ;
-  m_mainText->Clear() ;
-  DisableAllSprites();
+  m_game->GetSubText()->Clear() ;
+  m_game->GetMainText()->Clear() ;
+  m_game->DisableAllSprites() ;
+  return true ;
 }
 
-bool CGAME::MainMenu_Tick()
+bool CMAINMENUSTATE::OnTick()
 {
   ShowMainMenuSelector();
   ShowMainMenuStart() ;
   ShowMainMenuMusicVolume();
-  uint16_t keys = m_input.GetKeysDown() ; ;
+  uint16_t keys = m_game->GetInputManager()->GetKeysDown() ; ;
   if (keys & KEY_TOUCH)
   {
-    uint8_t lineTimes2 = m_input.GetLastTouchDownPosition().py / 8 ;
+    uint8_t lineTimes2 = m_game->GetInputManager()->GetLastTouchDownPosition().py / 8 ;
     if ((lineTimes2 > 3) && (lineTimes2 < 3 + MAINMENUITEM_COUNT*4))
     {
       uint8_t item = (lineTimes2-3) / 4 ;
@@ -47,11 +58,11 @@ bool CGAME::MainMenu_Tick()
         switch (m_mainMenuItem)
         {
           case MAINMENUITEM_DIFFICULTY:
-            IncreaseDifficulty();
+            m_game->IncreaseDifficulty();
             ShowMainMenuDifficulty();
             break;
           case MAINMENUITEM_VOLUME:
-            if (m_input.GetLastTouchDownPosition().px < 113 + m_musicVolume/16)
+            if (m_game->GetInputManager()->GetLastTouchDownPosition().px < 113 + m_musicVolume/16)
             {
               m_musicVolume -= 64 ;
               if ((m_musicVolume > 1024) || (m_musicVolume < 0))
@@ -62,13 +73,15 @@ bool CGAME::MainMenu_Tick()
               if ((m_musicVolume > 1024) || (m_musicVolume < 0))
                 m_musicVolume = 1024 ;
             }
-            m_audio->SetMusicVolume(m_musicVolume) ;
+            m_game->GetAudio()->SetMusicVolume(m_musicVolume) ;
             break ;
           case MAINMENUITEM_START:
-            StartLevel() ;
+            m_game->GetLevelManager()->UnloadLevel() ;
+            m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, LEVEL_FADETIME) ;
+            m_sm->ChangeState(GAMESTATE_LEVELLOADING);
             return true ;
           case MAINMENUITEM_SELECT:
-            ChangeState(GAMESTATE_LEVELSELECT) ;
+            m_sm->ChangeState(GAMESTATE_LEVELSELECT) ;
             return true;
         }
       } else 
@@ -78,56 +91,60 @@ bool CGAME::MainMenu_Tick()
       }
     }
   }
-  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_MODIFY_MINUS))
+  if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_MENU_MODIFY_MINUS))
   {  
     switch (m_mainMenuItem)
     {
       case MAINMENUITEM_DIFFICULTY:
-        DecreaseDifficulty();
+        m_game->DecreaseDifficulty();
         ShowMainMenuDifficulty();
         break;
       case MAINMENUITEM_VOLUME:
         m_musicVolume -= 64 ;
         if ((m_musicVolume > 1024) || (m_musicVolume < 0))
           m_musicVolume = 0 ;
-        m_audio->SetMusicVolume(m_musicVolume) ;
+        m_game->GetAudio()->SetMusicVolume(m_musicVolume) ;
         break ;
       case MAINMENUITEM_START:
-        StartLevel() ;
+        m_game->GetLevelManager()->UnloadLevel() ;
+        m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, LEVEL_FADETIME) ;
+        m_sm->ChangeState(GAMESTATE_LEVELLOADING);
         return true ;
       case MAINMENUITEM_SELECT:
-        ChangeState(GAMESTATE_LEVELSELECT) ;
+        m_sm->ChangeState(GAMESTATE_LEVELSELECT) ;
         return true;
     }
   }
-  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_MODIFY_PLUS))
+  if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_MENU_MODIFY_PLUS))
   {  
     switch (m_mainMenuItem)
     {
       case MAINMENUITEM_DIFFICULTY:
-        IncreaseDifficulty();
+        m_game->IncreaseDifficulty();
         ShowMainMenuDifficulty();
         break;
       case MAINMENUITEM_START:
-        StartLevel() ;
+        m_game->GetLevelManager()->UnloadLevel() ;
+        m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, LEVEL_FADETIME) ;
+        m_sm->ChangeState(GAMESTATE_LEVELLOADING);
         return true ;
       case MAINMENUITEM_VOLUME:
         m_musicVolume += 64 ;
         if ((m_musicVolume > 1024) || (m_musicVolume < 0))
           m_musicVolume = 1024 ;
-        m_audio->SetMusicVolume(m_musicVolume) ;
+        m_game->GetAudio()->SetMusicVolume(m_musicVolume) ;
         break ;
       case MAINMENUITEM_SELECT:
-        ChangeState(GAMESTATE_LEVELSELECT) ;
+        m_sm->ChangeState(GAMESTATE_LEVELSELECT) ;
         return true;
     }
   }
-  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_UP))
+  if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_MENU_UP))
   {  
     m_mainMenuItem = (m_mainMenuItem - 1 + MAINMENUITEM_COUNT) % MAINMENUITEM_COUNT ;
     ShowMainMenuSelector() ;
   }
-  if (m_input.IsKeyForAlias(keys, KEYALIAS_MENU_DOWN))
+  if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_MENU_DOWN))
   {  
     m_mainMenuItem = (m_mainMenuItem + 1) % MAINMENUITEM_COUNT ;
     ShowMainMenuSelector() ;
@@ -135,7 +152,7 @@ bool CGAME::MainMenu_Tick()
   return true ;
 }
 
-void CGAME::ShowMainMenuMusicVolume() 
+void CMAINMENUSTATE::ShowMainMenuMusicVolume() 
 {
   char buffer[] = "\x0D\x0D \x17\x18\x18\x18\x18\x18\x18\x18\x18\x0F";
   for (int i=0;i<m_musicVolume / 128; i++)
@@ -146,14 +163,14 @@ void CGAME::ShowMainMenuMusicVolume()
   {
     buffer[4+m_musicVolume / 128] = 0x18 + ((m_musicVolume % 128) / 16) ;
   }
-  m_subText->SetText(10, 2, buffer) ;
+  m_game->GetSubText()->SetText(10, 2, buffer) ;
 }
 
-void CGAME::ShowMainMenuDifficulty()
+void CMAINMENUSTATE::ShowMainMenuDifficulty()
 {
   char *diffText = 0;
   uint8_t pal = 0 ;
-  switch (m_difficulty)
+  switch (m_game->GetDifficulty())
   {
     case eBEGINNER:
       diffText = (char *)"  BEGINNER  " ;
@@ -172,23 +189,23 @@ void CGAME::ShowMainMenuDifficulty()
       pal = 1 ;
       break ;
   }
-  m_subText->SetBiColorText(16 - strlen(diffText) / 2, 4, diffText, pal, pal+1) ;
+  m_game->GetSubText()->SetBiColorText(16 - strlen(diffText) / 2, 4, diffText, pal, pal+1) ;
 }
 
-void CGAME::ShowMainMenuStart()
+void CMAINMENUSTATE::ShowMainMenuStart()
 {
   char *text = (char *)"Random level" ;
-  m_subText->SetText(16 - strlen(text) / 2, 6, text) ;
+  m_game->GetSubText()->SetText(16 - strlen(text) / 2, 6, text) ;
   text = (char *)"Select level" ;
-  m_subText->SetText(16 - strlen(text) / 2, 8, text) ;
+  m_game->GetSubText()->SetText(16 - strlen(text) / 2, 8, text) ;
 }
 
-void CGAME::ShowMainMenuSelector()
+void CMAINMENUSTATE::ShowMainMenuSelector()
 {
-  int32_t scale = sinLerp(GetTimerTicks()*70);
+  int32_t scale = sinLerp(m_game->GetTimerTicks()*70);
   oamSet(&oamSub, 0, 2*2*8 + scale * 8 / 4096, 2*2*8 - 25 + 4*8*m_mainMenuItem, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-        m_spriteContent[SPRITE_CAR_TARGET], 0, true, false, false, false, false);
+        m_game->GetSpriteLocation(SPRITE_CAR_TARGET), 0, true, false, false, false, false);
   oamSet(&oamSub, 1, 12*2*8 - scale * 8 / 4096, 2*2*8 - 25 + 4*8*m_mainMenuItem, 0, 0, SpriteSize_16x32, SpriteColorFormat_256Color, 
-        m_spriteContent[SPRITE_CAR_TARGET], 0, true, false, false, false, false);
+        m_game->GetSpriteLocation(SPRITE_CAR_TARGET), 0, true, false, false, false, false);
   oamUpdate(&oamSub);  
 }

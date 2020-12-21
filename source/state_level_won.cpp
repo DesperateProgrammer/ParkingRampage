@@ -1,41 +1,48 @@
 #include "gameclass.h"
+#include "state_level_won.h"
 #include <nds.h>
 #include <stdio.h>
 
-void CGAME::LevelWon_EnterState()
+CLEVELWONSTATE::CLEVELWONSTATE(CGAME *game) 
 {
-  PauseLevelTime() ;
-  m_selectedCar = 0 ;
-  m_subText->Clear() ;
-  m_subText->SetText(12, 5, (char *)"You won!", TEXTCOLOR_RAINBOW) ;
+  m_game = game ;
+}
+
+bool CLEVELWONSTATE::OnEnter()
+{
+  m_game->GetLevelManager()->PauseLevelTime() ;
+  m_game->GetSubText()->Clear() ;
+  m_game->GetSubText()->SetText(12, 5, (char *)"You won!", TEXTCOLOR_RAINBOW) ;
   char buffer[32] ;
-  uint32_t lTime = GetCurrentLevelTime() ;
-  snprintf(buffer, 32, "%i moves in %li.%li s", m_moves, lTime / 1000, (lTime / 100) % 10) ;
-  m_subText->SetText((256 - strlen(buffer)*8) / 16, 7, buffer) ;
-  m_subText->EnableTextWindow(32, 64, 192, 80) ;
+  uint32_t lTime = m_game->GetLevelManager()->GetCurrentLevelTime() ;
+  snprintf(buffer, 32, "%i moves in %li.%li s", m_game->GetLevelManager()->GetMoveCount(), lTime / 1000, (lTime / 100) % 10) ;
+  m_game->GetSubText()->SetText((256 - strlen(buffer)*8) / 16, 7, buffer) ;
+  m_game->GetSubText()->EnableTextWindow(32, 64, 192, 80) ;
+  return true ;
 }
 
-void CGAME::LevelWon_LeaveState()
+bool CLEVELWONSTATE::OnLeave()
 {
-  m_mainText->Clear() ;
-  m_subText->Clear() ;  
-  DisableAllSprites() ;
+  m_game->GetMainText()->Clear() ;
+  m_game->GetSubText()->Clear() ;  
+  m_game->DisableAllSprites() ;
+  return true ;
 }
 
-bool CGAME::LevelWon_Tick()
+bool CLEVELWONSTATE::OnTick()
 {
-  if (m_input.GetKeysDown())
+  if (m_game->GetInputManager()->GetKeysDown())
   {
-    StartFade(SCREEN_BOTTOM, eFADEOUT, 1000) ;
+    m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, 1000) ;
     return true ;
   }
-  if (!IsFading(SCREEN_BOTTOM))
+  if (!m_game->IsFading(SCREEN_BOTTOM))
   {
-    if (GetFadeMode(SCREEN_BOTTOM) == eFADEIN)
+    if (m_game->GetFadeMode(SCREEN_BOTTOM) == eFADEIN)
     {
     } else
     {
-      ChangeState(GAMESTATE_MAINMENU) ;
+      m_sm->ChangeState(GAMESTATE_MAINMENU) ;
     }
   }  return true ;
 }

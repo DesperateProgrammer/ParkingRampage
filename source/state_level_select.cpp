@@ -1,28 +1,36 @@
 #include "gameclass.h"
+#include "state_level_select.h"
 #include <nds.h>
 #include <stdio.h>
 
-void CGAME::LevelSelect_EnterState()
+CLEVELSELECTSTATE::CLEVELSELECTSTATE(CGAME *game) 
 {
-  StartFade(SCREEN_BOTTOM, eFADEOUT, 0) ;
-  m_levelTiles->Initialize() ;
-  m_subText->Clear() ;
-  DisableAllSprites() ;
+  m_game = game ;
 }
 
-void CGAME::LevelSelect_LeaveState()
+
+bool CLEVELSELECTSTATE::OnEnter()
 {
-  m_mainText->Clear() ;
-  m_subText->Clear() ;  
-  DisableAllSprites() ;
+  m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, 0) ;
+  m_game->GetSubText()->Clear() ;
+  m_game->DisableAllSprites() ;
+  return true ;
 }
 
-void CGAME::UpdateLevelSelectionInfo()
+bool CLEVELSELECTSTATE::OnLeave()
+{
+  m_game->GetMainText()->Clear() ;
+  m_game->GetSubText()->Clear() ;  
+  m_game->DisableAllSprites() ;
+  return true ;
+}
+
+void CLEVELSELECTSTATE::UpdateLevelSelectionInfo()
 {
   char buffer[32] ;
   char *diffText = 0;
   uint8_t pal = 0 ;
-  switch (m_difficulty)
+  switch (m_game->GetDifficulty())
   {
     case eBEGINNER:
       diffText = (char *)"BEGINNER" ;
@@ -42,116 +50,115 @@ void CGAME::UpdateLevelSelectionInfo()
       break ;
   }  
   sprintf(buffer, "  %s - %i  ", diffText, (m_levelIndexInDifficulty+1));
-  m_subText->EnableTextWindow(4*8, 9*16+8, 24*8, 2*16) ; 
-  m_mainText->SetBiColorText(16 - strlen(buffer) / 2, 2, buffer, pal, pal+1);
-  m_subText->SetText(5, 10, (char *)"\x11 Return");
-  m_subText->SetText(19, 10, (char *)"Start \x12");
+  m_game->GetSubText()->EnableTextWindow(4*8, 9*16+8, 24*8, 2*16) ; 
+  m_game->GetMainText()->SetBiColorText(16 - strlen(buffer) / 2, 2, buffer, pal, pal+1);
+  m_game->GetSubText()->SetText(5, 10, (char *)"\x11 Return");
+  m_game->GetSubText()->SetText(19, 10, (char *)"Start \x12");
   
-  m_mainText->SetText(7, 5, (char *)"\x14\x15\x16 Change level");
-  m_mainText->SetText(7, 7, (char *)"\x10\x13\x10 Start level");
-  m_mainText->EnableTextWindow(32, 24, 192, 128) ; 
+  m_game->GetMainText()->SetText(7, 5, (char *)"\x14\x15\x16 Change level");
+  m_game->GetMainText()->SetText(7, 7, (char *)"\x10\x13\x10 Start level");
+  m_game->GetMainText()->EnableTextWindow(32, 24, 192, 128) ; 
 }
 
-bool CGAME::LevelSelect_Tick()
+bool CLEVELSELECTSTATE::OnTick()
 {
-  UpdateCarsOnScreen(false);
+  m_game->GetLevelManager()->UpdateCarsOnScreen(false);
   UpdateLevelSelectionInfo() ;
-  if (!IsFading(SCREEN_BOTTOM))
+  if (!m_game->IsFading(SCREEN_BOTTOM))
   {
-    if (GetFadeMode(SCREEN_BOTTOM) == eFADEOUT)
+    if (m_game->GetFadeMode(SCREEN_BOTTOM) == eFADEOUT)
     {
-      m_levelTiles->Initialize() ;
       /* find a level */
-      srand(GetTimerTicks()) ;
-      uint16_t diffCnt = GetLevelCountForDifficulty(m_difficulty) ;
+      srand(m_game->GetTimerTicks()) ;
+      uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
       m_levelIndexInDifficulty = 0 ;
       if (diffCnt)
       {
-        uint16_t level = GetLevel(m_difficulty, m_levelIndexInDifficulty) ;
-        LoadLevel(level)  ;
+        uint16_t level = m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty) ;
+        m_game->GetLevelManager()->LoadLevel(level)  ;
       } else
       {
-        LoadLevel(0) ;
+        m_game->GetLevelManager()->LoadLevel(0) ;
       }
-      StartFade(SCREEN_BOTTOM, eFADEIN, LEVEL_FADETIME) ;
+      m_game->StartFade(SCREEN_BOTTOM, eFADEIN, LEVEL_FADETIME) ;
     } else
     {
-      uint16_t keys = m_input.GetKeysDown() ; ;
+      uint16_t keys = m_game->GetInputManager()->GetKeysDown() ; ;
       if (keys & KEY_TOUCH)
       {
-        if ((m_input.GetLastTouchDownPosition().py >= 9*16+8) && (m_input.GetLastTouchDownPosition().py < 11*16+8))
+        if ((m_game->GetInputManager()->GetLastTouchDownPosition().py >= 9*16+8) && (m_game->GetInputManager()->GetLastTouchDownPosition().py < 11*16+8))
         {
-          if ((m_input.GetLastTouchDownPosition().px >= 4*8) && (m_input.GetLastTouchDownPosition().px < 28*8))
+          if ((m_game->GetInputManager()->GetLastTouchDownPosition().px >= 4*8) && (m_game->GetInputManager()->GetLastTouchDownPosition().px < 28*8))
           {
-            if (m_input.GetLastTouchDownPosition().px < 128)
+            if (m_game->GetInputManager()->GetLastTouchDownPosition().px < 128)
             {
               // Return
-              ResetLevelTime() ;
-              ChangeState(GAMESTATE_MAINMENU) ;                    
+              m_game->GetLevelManager()->ResetLevelTime() ;
+              m_sm->ChangeState(GAMESTATE_MAINMENU) ;                    
             } else
             {
               // Start
-              ResetLevelTime() ;
-              m_moves = 0 ;
-              ChangeState(GAMESTATE_LEVELRUNNING) ;
+              m_game->GetLevelManager()->ResetLevelTime() ;
+              m_game->GetLevelManager()->ResetLevel() ;
+              m_sm->ChangeState(GAMESTATE_LEVELRUNNING) ;
             }
           }
         }
       }
-      if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_NEXT))
+      if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_NEXT))
       {  
-        DisableAllSprites() ;
-        m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % GetLevelCountForDifficulty(m_difficulty) ;
-        LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
+        m_game->DisableAllSprites() ;
+        m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
+        m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;
       }
-      if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_PREVIOUS))
+      if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_PREVIOUS))
       {  
-        DisableAllSprites() ;
+        m_game->DisableAllSprites() ;
         if (m_levelIndexInDifficulty)
-          m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % GetLevelCountForDifficulty(m_difficulty) ;
+          m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
         else
-          m_levelIndexInDifficulty = GetLevelCountForDifficulty(m_difficulty) - 1;
-        LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
+          m_levelIndexInDifficulty = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) - 1;
+        m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;
       }
-      if (m_input.IsKeyForAlias(keys, KEYALIAS_RETURN))
+      if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_RETURN))
       {  
-        ResetLevelTime() ;
-        ChangeState(GAMESTATE_MAINMENU) ;
+        m_game->GetLevelManager()->ResetLevelTime() ;
+        m_sm->ChangeState(GAMESTATE_MAINMENU) ;
       }
-      if (m_input.IsKeyForAlias(keys, KEYALIAS_SELECT_START))
+      if (m_game->GetInputManager()->IsKeyForAlias(keys, KEYALIAS_SELECT_START))
       {
-        ResetLevelTime() ;
-        m_mainText->Clear();
-        m_moves = 0 ;
-        ChangeState(GAMESTATE_LEVELRUNNING) ;
+        m_game->GetLevelManager()->ResetLevelTime() ;
+        m_game->GetMainText()->Clear();
+        m_game->GetLevelManager()->ResetLevel();
+        m_sm->ChangeState(GAMESTATE_LEVELRUNNING) ;
       }
-      keys = m_input.GetKeysHeld() ;
+      keys = m_game->GetInputManager()->GetKeysHeld() ;
       if (keys & KEY_TOUCH)
       {
         // Swipe Left & right?
-        int16_t moveX = (int16_t)m_input.GetLastTouchDownPosition().px - m_input.GetLastTouchPosition().px ;
+        int16_t moveX = (int16_t)m_game->GetInputManager()->GetLastTouchDownPosition().px - m_game->GetInputManager()->GetLastTouchPosition().px ;
         bool handled = false ;
         if (moveX > 32)
         {
-          DisableAllSprites() ;
+          m_game->DisableAllSprites() ;
           if (m_levelIndexInDifficulty)
-            m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % GetLevelCountForDifficulty(m_difficulty) ;
+            m_levelIndexInDifficulty = (m_levelIndexInDifficulty - 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
           else
-            m_levelIndexInDifficulty = GetLevelCountForDifficulty(m_difficulty) - 1;
-          LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;
+            m_levelIndexInDifficulty = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) - 1;
+          m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;
           handled = true ;
         } else if (moveX < -32)
         {
-          DisableAllSprites() ;
-          m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % GetLevelCountForDifficulty(m_difficulty) ;
-          LoadLevel(GetLevel(m_difficulty, m_levelIndexInDifficulty)) ;                  
+          m_game->DisableAllSprites() ;
+          m_levelIndexInDifficulty = (m_levelIndexInDifficulty + 1) % m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
+          m_game->GetLevelManager()->LoadLevel(m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), m_levelIndexInDifficulty)) ;                  
           handled = true ;
         }
         if (handled)
         {
           // reset point of touch down, so we will not move it instantly again but use
           // the new position as the start of movement
-          m_input.AccountDrag();
+          m_game->GetInputManager()->AccountDrag();
         }
       }
     }

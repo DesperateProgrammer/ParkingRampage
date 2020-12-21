@@ -1,4 +1,4 @@
-#include "audiostreamig.h"
+#include "audiostreaming.h"
 
 #include "soundbank.h"
 #include "soundbank_bin.h"

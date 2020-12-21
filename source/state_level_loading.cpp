@@ -1,40 +1,42 @@
 #include "gameclass.h"
+#include "state_level_loading.h"
 #include <nds.h>
 
-void CGAME::LevelLoading_EnterState()
+CLEVELLOADINGSTATE::CLEVELLOADINGSTATE(CGAME *game) 
 {
-  m_selectedCar = 0 ;
-  m_moves = 0 ;
-  ResetLevelTime() ;
-  m_subText->Clear() ;
+  m_game = game ;
 }
 
-void CGAME::LevelLoading_LeaveState()
+bool CLEVELLOADINGSTATE::OnEnter() 
 {
+  m_game->GetLevelManager()->ResetLevel() ;
+  m_game->GetLevelManager()->ResetLevelTime() ;
+  m_game->GetSubText()->Clear() ;
+  return true ;
 }
 
-bool CGAME::LevelLoading_Tick()
+bool CLEVELLOADINGSTATE::OnTick()  
 {
-  if (!IsFading(SCREEN_BOTTOM))
+  if (!m_game->IsFading(SCREEN_BOTTOM))
   {
-    if (GetFadeMode(SCREEN_BOTTOM) == eFADEOUT)
+    if (m_game->GetFadeMode(SCREEN_BOTTOM) == eFADEOUT)
     {
-      m_levelTiles->Initialize() ;
+      
       /* find a level */
-      srand(GetTimerTicks()) ;
-      uint16_t diffCnt = GetLevelCountForDifficulty(m_difficulty) ;
+      srand(m_game->GetTimerTicks()) ;
+      uint16_t diffCnt = m_game->GetLevelManager()->GetLevelCountForDifficulty(m_game->GetDifficulty()) ;
       if (diffCnt)
       {
-        uint16_t level = GetLevel(m_difficulty, rand() % diffCnt) ;
-        LoadLevel(level)  ;
+        uint16_t level = m_game->GetLevelManager()->GetLevel(m_game->GetDifficulty(), rand() % diffCnt) ;
+        m_game->GetLevelManager()->LoadLevel(level)  ;
       } else
       {
-        LoadLevel(0) ;
+        m_game->GetLevelManager()->LoadLevel(0) ;
       }
-      StartFade(SCREEN_BOTTOM, eFADEIN, LEVEL_FADETIME) ;
+      m_game->StartFade(SCREEN_BOTTOM, eFADEIN, LEVEL_FADETIME) ;
     } else
     {
-      ChangeState(GAMESTATE_LEVELRUNNING) ;
+      m_sm->ChangeState(GAMESTATE_LEVELRUNNING) ;
     }
     return true ;
   }
