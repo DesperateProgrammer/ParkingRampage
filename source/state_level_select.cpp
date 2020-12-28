@@ -30,7 +30,7 @@ void CLEVELSELECTSTATE::UpdateLevelSelectionInfo()
   char buffer[32] ;
   char *diffText = 0;
   uint8_t pal = 0 ;
-  switch (m_game->GetLevelManager()->GetDifficulty())
+  switch (m_game->GetLevelManager()->GetLoadedDifficulty())
   {
     case eBEGINNER:
       diffText = (char *)"BEGINNER" ;
@@ -47,6 +47,10 @@ void CLEVELSELECTSTATE::UpdateLevelSelectionInfo()
     case eEXPERT:
       diffText = (char *)"EXPERT" ;
       pal = 1 ;
+      break ;
+    case eANY:
+      diffText = (char *)"ANY" ;
+      pal = 9 ;
       break ;
   }  
   sprintf(buffer, "  %s - %i  ", diffText, (m_levelIndexInDifficulty+1));

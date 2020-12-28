@@ -11,6 +11,8 @@ bool CLEVELLOADINGSTATE::OnEnter()
 {
   m_game->GetLevelManager()->ResetLevel() ;
   m_game->GetLevelManager()->ResetLevelTime() ;
+  m_game->GetLevelManager()->UnloadLevel() ;
+  m_game->StartFade(SCREEN_BOTTOM, eFADEOUT, LEVEL_FADETIME) ;
   m_game->GetSubText()->Clear() ;
   return true ;
 }

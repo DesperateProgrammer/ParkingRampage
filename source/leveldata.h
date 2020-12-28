@@ -39,7 +39,8 @@ typedef enum EDIFFICULTY
   eBEGINNER,
   eINTERMEDIATE,
   eADVANCED,
-  eEXPERT
+  eEXPERT,
+  eANY
 } EDIFFICULTY ;
 
 typedef struct SLEVELDATA

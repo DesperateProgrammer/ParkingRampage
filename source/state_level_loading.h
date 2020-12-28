@@ -1,4 +1,5 @@
 #include "gameclass.h"
+#include "tilemap.h"
 
 typedef class CLEVELLOADINGSTATE : public CSTATE
 {

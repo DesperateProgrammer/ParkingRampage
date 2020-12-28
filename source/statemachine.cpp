@@ -14,11 +14,16 @@ bool CSTATE::Activate()
   
 CSTATEMACHINE::CSTATEMACHINE() 
 {
-  m_state = 0xffff ;
+  m_sheduledChange = m_state = 0xffff ;
+  
 }
 
 bool CSTATEMACHINE::Tick()
 {
+  if (m_sheduledChange != m_state)
+  {
+    ChangeState(m_sheduledChange) ;
+  }
   OnEveryTick() ;
   if (m_stateClasses.find(m_state) != m_stateClasses.end())
   {
@@ -27,6 +32,11 @@ bool CSTATEMACHINE::Tick()
   {
     return OnStateTick() ;
   } 
+}
+
+void CSTATEMACHINE::ChangeStateOnNextTick(uint16_t newState) 
+{
+  m_sheduledChange = newState ;
 }
 
 bool CSTATEMACHINE::ChangeState(uint16_t newState) 
@@ -41,7 +51,7 @@ bool CSTATEMACHINE::ChangeState(uint16_t newState)
       OnStateLeave() ;
     }
   }
-  m_state = newState ;
+  m_sheduledChange = m_state = newState ;
   if (m_stateClasses.find(m_state) != m_stateClasses.end())
   {
     return m_stateClasses[m_state]->OnEnter() ;

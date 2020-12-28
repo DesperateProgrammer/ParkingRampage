@@ -2,6 +2,7 @@
 
 #include <fat.h>
 #include <stdio.h>
+#include <string>
 
 typedef enum ESTORAGETYPE
 {

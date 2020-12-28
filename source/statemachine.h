@@ -22,6 +22,7 @@ typedef class CSTATEMACHINE
 {
   protected:
     uint16_t  m_state ;
+    uint16_t  m_sheduledChange ;
     std::map<uint16_t, CSTATE *> m_stateClasses;
     
   public:
@@ -29,6 +30,7 @@ typedef class CSTATEMACHINE
     
     bool Tick() ;
     bool ChangeState(uint16_t newState) ;
+    void ChangeStateOnNextTick(uint16_t newState) ;
     
     virtual bool OnStateTick() ;
     virtual bool OnStateEnter() ;

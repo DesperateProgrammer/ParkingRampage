@@ -1,5 +1,6 @@
 #pragma once
 #include "leveldata.h"
+#include "tilemap.h"
 #include "gameclass.h"
 
 
@@ -82,9 +83,9 @@ typedef class CLEVELMANAGER
     
     uint32_t GetCurrentLevelTime() ;
     
-    void IncreaseDifficulty() ;
-    void DecreaseDifficulty() ;
+    EDIFFICULTY GetDifficulty() { return m_difficulty; };
+    EDIFFICULTY GetLoadedDifficulty() { return gLevels[levelNumber].difficulty; };
+    void SetDifficulty(EDIFFICULTY diff) { m_difficulty = diff ; };
     
-    EDIFFICULTY GetDifficulty() { return m_difficulty; };    
 
 } CLEVELMANAGER ;

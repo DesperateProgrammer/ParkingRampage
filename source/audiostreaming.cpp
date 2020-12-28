@@ -30,5 +30,7 @@ CAUDIOSTREAMING::CAUDIOSTREAMING()
 void CAUDIOSTREAMING::SetMusicVolume(uint16_t volume)
 {
   volume = max(0, min(volume, 1024));
-  mmSetModuleVolume(volume) ;
+  if (m_musicVolume != volume)  
+    mmSetModuleVolume(volume) ;
+  m_musicVolume = volume ;
 }

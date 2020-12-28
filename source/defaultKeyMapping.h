@@ -1,7 +1,6 @@
 #pragma once
 
 #include <stdint.h>
-#include <nds.h>
 
 #define KEYALIAS_MENU_UP              1
 #define KEYALIAS_MENU_DOWN            2

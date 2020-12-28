@@ -1,5 +1,6 @@
 #include "state_loading.h"
 #include "title.h"
+#include <stdio.h>
 
 CGAMELOADINGSTATE::CGAMELOADINGSTATE(CGAME *game) 
 {
@@ -8,12 +9,26 @@ CGAMELOADINGSTATE::CGAMELOADINGSTATE(CGAME *game)
   m_mainScreenTiles = new CTILEMAP(0, (uint16_t *)titleTiles, titleTilesLen, (uint16_t *)titlePal, titlePalLen, (uint16_t *)titleMap, titleMapLen) ;  
 }
 
+extern int gArgC ;
+extern char **gArgV ;
+
 bool CGAMELOADINGSTATE::OnEnter()
 {
   m_mainScreenTiles->Initialize() ;
   m_titleTiles->Initialize() ; 
   m_game->StartFade(0, eFADEIN, TITLE_FADETIME) ;
   m_game->StartFade(1, eFADEIN, TITLE_FADETIME) ;
+ 
+#if 0
+  char buffer[32] ;
+  snprintf(buffer, 32, "%li", *(volatile uint32_t *)0x4004000) ;
+  m_game->GetMainText()->SetText(0,0,buffer) ;
+  for (int i=0;i<gArgC;i++)
+  {
+    snprintf(buffer, 32, "%s", gArgV[i]) ;
+    m_game->GetMainText()->SetText(0,i+1,buffer) ;
+  }
+#endif
   return true ;       
 }
 

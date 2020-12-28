@@ -26,6 +26,7 @@ typedef class CSPRITEMANAGER
     CSPRITEMANAGER(uint8_t screen) ;
     
     void LoadSprite(uint16_t id, uint8_t *src, uint16_t length, SpriteSize spriteSize) ;
+    
     void SetSprite(uint8_t slot, uint16_t sprite, uint16_t x, uint16_t y, uint8_t orientation) ;
     void Update() ;
     

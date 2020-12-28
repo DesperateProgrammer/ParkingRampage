@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include "leveldata.h"
-#include "tilemap.h"
 #include "textoverlay.h"
 #include "audiostreaming.h"
 #include "levelmanager.h"

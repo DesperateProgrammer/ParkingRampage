@@ -18,10 +18,6 @@ extern "C" {
     gArgC = argc ;
     gArgV = argv ;
 
-    if (argc == 0)
-    {
-    }
-
     CGAME game = CGAME() ;
     game.Run();
   }

@@ -1,4 +1,6 @@
 #include "gameclass.h"
+#include "tilemap.h"
+#include "menu.h"
 #include <nds.h>
 
 #define MAINMENUITEM_VOLUME       0
@@ -18,10 +20,10 @@ typedef class CMAINMENUSTATE : public CSTATE
     uint16_t m_musicVolume = 768 ;
     
     uint8_t m_mainMenuItem = MAINMENUITEM_START ;
+    
+    CMENU *m_menu ;
+    CMENUITEM *m_menuitems[4] ;
 
-    void ShowMainMenuDifficulty() ;
-    void ShowMainMenuStart() ;
-    void ShowMainMenuSelector() ;
     void ShowMainMenuMusicVolume() ;
     
         

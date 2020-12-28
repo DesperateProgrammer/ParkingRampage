@@ -70,7 +70,7 @@ uint16_t CLEVELMANAGER::GetLevelCountForDifficulty(const EDIFFICULTY targetDiff)
   uint16_t cnt = 0 ;
   while (gLevels[i].width)
   {
-    if (gLevels[i].difficulty == targetDiff)
+    if ((gLevels[i].difficulty == targetDiff) || (targetDiff == eANY))
       cnt++ ;
     i++;
   }
@@ -79,6 +79,10 @@ uint16_t CLEVELMANAGER::GetLevelCountForDifficulty(const EDIFFICULTY targetDiff)
 
 uint16_t CLEVELMANAGER::GetLevel(const EDIFFICULTY targetDiff, uint16_t index)
 {
+  if (targetDiff == eANY)
+  {
+    return index ;
+  }
   uint16_t i=0;
   uint16_t cnt = 0 ;
   while (gLevels[i].width)
@@ -180,28 +184,6 @@ void CLEVELMANAGER::ResetLevel()
 {
   m_moves = 0 ;
   m_selectedCar = 0 ;
-}
-
-void CLEVELMANAGER::IncreaseDifficulty()
-{
-  switch (m_difficulty)
-  {
-    case eBEGINNER:     m_difficulty = eINTERMEDIATE; break;
-    case eINTERMEDIATE: m_difficulty = eADVANCED; break;
-    case eADVANCED:     m_difficulty = eEXPERT; break;
-    case eEXPERT:       m_difficulty = eBEGINNER; break;
-  }
-}
-
-void CLEVELMANAGER::DecreaseDifficulty()
-{
-  switch (m_difficulty)
-  {
-    case eBEGINNER:     m_difficulty = eEXPERT; break;
-    case eINTERMEDIATE: m_difficulty = eBEGINNER; break;
-    case eADVANCED:     m_difficulty = eINTERMEDIATE; break;
-    case eEXPERT:       m_difficulty = eADVANCED; break;
-  }
 }
 
 void CLEVELMANAGER::SelectNextCarLeft() 

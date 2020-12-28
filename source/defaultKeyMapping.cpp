@@ -1,4 +1,5 @@
 #include "defaultKeyMapping.h"
+#include <nds.h>
 
 const uint16_t gDefaultKeyMapping[] = 
 {
