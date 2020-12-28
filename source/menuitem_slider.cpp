@@ -8,6 +8,11 @@ CMENUITEMSLIDER::CMENUITEMSLIDER(class CGAME *game, uint32_t id, std::string cap
 
 void CMENUITEMSLIDER::OnTouch(touchPosition pos)
 {
+  uint32_t sliderMin = ((32 - (11 + m_caption.length())) / 2) * 8 + (m_caption.length() + 2) * 8 ;
+  if ((pos.px >= sliderMin) && (pos.px < sliderMin + 8*8))
+  {
+    SetValue(m_min + ((m_max - m_min) * (pos.px - sliderMin)) / 64) ;
+  }
 }
 
 void CMENUITEMSLIDER::OnModifyPlus()
@@ -36,6 +41,8 @@ void CMENUITEMSLIDER::OnTick(uint8_t y)
 
   if ((m_value % valuePerChar) / valuePerStep)
   {
+    if (m_value / valuePerChar >= 1) 
+      buffer[m_caption.length() + 2 + (m_value / valuePerChar)-1] = 0x0E ;
     buffer[m_caption.length() + 2 + (m_value / valuePerChar)] = 0x18 + ((m_value % valuePerChar) / valuePerStep) ;
   }
 

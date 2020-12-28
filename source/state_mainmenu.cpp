@@ -11,7 +11,6 @@
 CMAINMENUSTATE::CMAINMENUSTATE(CGAME *game) 
 {
   m_game = game ;
-  m_game->GetAudio()->SetMusicVolume(m_musicVolume) ;
   m_mainMenuTiles = new CTILEMAP(1, (uint16_t *)mainmenuTiles, mainmenuTilesLen, (uint16_t *)mainmenuPal, mainmenuPalLen, (uint16_t *)mainmenuMap, mainmenuMapLen) ;
 }
 
@@ -20,8 +19,8 @@ bool CMAINMENUSTATE::OnEnter()
   m_game->StartFade(1, eFADEIN, MAINMENU_FADETIME) ;
   m_mainMenuTiles->Initialize() ;          
   m_menu = new CMENUWITHCARSELECTOR(m_game) ;
-  m_menuitems[0] = new CMENUITEMSLIDER(m_game, 0, "\x0D\x0D", 0, 1024, m_game->GetAudio()->GetMusicVolume()) ;
-  m_menuitems[1] = new CMENUITEMCOLOREDENUMERATION(m_game, 1, "Difficulty") ;
+  m_menuitems[0] = new CMENUITEMSLIDER(m_game, MAINMENUITEM_VOLUME, "\x0D\x0D", 0, 1024, m_game->GetAudio()->GetMusicVolume()) ;
+  m_menuitems[1] = new CMENUITEMCOLOREDENUMERATION(m_game, MAINMENUITEM_DIFFICULTY, "Difficulty") ;
   ((CMENUITEMCOLOREDENUMERATION *)m_menuitems[1])->AddEntry((uint32_t)eBEGINNER, "Beginner", 3) ;
   ((CMENUITEMCOLOREDENUMERATION *)m_menuitems[1])->AddEntry((uint32_t)eINTERMEDIATE, "Intermediate", 5) ;
   ((CMENUITEMCOLOREDENUMERATION *)m_menuitems[1])->AddEntry((uint32_t)eADVANCED, "Advanced", 7) ;
@@ -32,6 +31,7 @@ bool CMAINMENUSTATE::OnEnter()
   m_menuitems[3] = new CMENUITEMGAMESTATE(m_game, MAINMENUITEM_SELECT, "Select Level", GAMESTATE_LEVELSELECT) ;
   for (int i=0;i<4;i++)
     m_menu->AddItem(m_menuitems[i]) ;
+  m_menu->SelectItem(m_menuitems[2]) ;
   return true ;
 }
 
@@ -53,19 +53,3 @@ bool CMAINMENUSTATE::OnTick()
   m_game->GetAudio()->SetMusicVolume(((CMENUITEMSLIDER *)m_menuitems[0])->GetValue()) ;
   return true ;
 }
-
-void CMAINMENUSTATE::ShowMainMenuMusicVolume() 
-{
-  char buffer[] = "\x0D\x0D \x17\x18\x18\x18\x18\x18\x18\x18\x18\x0F";
-  for (int i=0;i<m_musicVolume / 128; i++)
-  {
-    buffer[i+4] = 0x0E ;
-  }
-  if ((m_musicVolume % 128) / 16)
-  {
-    buffer[4+m_musicVolume / 128] = 0x18 + ((m_musicVolume % 128) / 16) ;
-  }
-  m_game->GetSubText()->SetText(10, 2, buffer) ;
-}
-
-

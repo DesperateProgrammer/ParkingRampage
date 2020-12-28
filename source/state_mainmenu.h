@@ -16,16 +16,10 @@ typedef class CMAINMENUSTATE : public CSTATE
     CGAME *m_game ;
     
     CTILEMAP *m_mainMenuTiles ;
-    
-    uint16_t m_musicVolume = 768 ;
-    
-    uint8_t m_mainMenuItem = MAINMENUITEM_START ;
-    
+        
     CMENU *m_menu ;
     CMENUITEM *m_menuitems[4] ;
 
-    void ShowMainMenuMusicVolume() ;
-    
         
   public:
     CMAINMENUSTATE(CGAME *game) ;

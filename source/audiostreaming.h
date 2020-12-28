@@ -8,7 +8,7 @@ typedef class CAUDIOSTREAMING
   protected:
     static class CAUDIOSTREAMING *m_self ;    
     
-    uint16_t m_musicVolume ;
+    uint16_t m_musicVolume = 768;
     
   public:
     CAUDIOSTREAMING();
