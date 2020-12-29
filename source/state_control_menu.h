@@ -1,5 +1,6 @@
 #include "gameclass.h"
 #include "tilemap.h"
+#include "menu.h"
 #include <nds.h>
 
 typedef class CCONTROLMENUSTATE : public CSTATE
@@ -7,12 +8,10 @@ typedef class CCONTROLMENUSTATE : public CSTATE
   protected:
     CGAME *m_game ;
     
-    CTILEMAP *m_menuTiles ;
-    
-    
-    uint8_t m_menuItem = 0 ;
-
-    void ShowMenuSelector() ;    
+    CTILEMAP *m_mainMenuTiles ;
+        
+    CMENU *m_menu ;
+    CMENUITEM *m_menuitems[4] ; 
         
   public:
     CCONTROLMENUSTATE(CGAME *game) ;

@@ -16,10 +16,17 @@ CAUDIOSTREAMING::CAUDIOSTREAMING()
 {
 
   mmInitDefaultMem( (mm_addr)soundbank_bin );
+  
+  mmSetModuleVolume(m_musicVolume) ;
+  mmSetEffectsVolume(m_effectVolume) ;
+  
 
   // Start playing the music
 	mmLoad( MOD_MUSIC );
 	mmStart( MOD_MUSIC, MM_PLAY_LOOP );
+  
+  mmLoadEffect( SFX_START );
+  mmLoadEffect( SFX_APPLAUSE );
   
 }
 
@@ -34,3 +41,18 @@ void CAUDIOSTREAMING::SetMusicVolume(uint16_t volume)
     mmSetModuleVolume(volume) ;
   m_musicVolume = volume ;
 }
+
+void CAUDIOSTREAMING::SetEffectVolume(uint16_t volume)
+{
+  volume = max(0, min(volume, 1024));
+  if (m_effectVolume != volume)
+    mmSetEffectsVolume(volume) ;
+  m_effectVolume = volume ;
+}
+
+void CAUDIOSTREAMING::PlayEffect(unsigned int id) 
+{
+  mmEffect((mm_word)id);
+}
+
+

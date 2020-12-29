@@ -2,6 +2,7 @@
 #include "state_level_won.h"
 #include <nds.h>
 #include <stdio.h>
+#include "soundbank.h"
 
 CLEVELWONSTATE::CLEVELWONSTATE(CGAME *game) 
 {
@@ -18,6 +19,7 @@ bool CLEVELWONSTATE::OnEnter()
   snprintf(buffer, 32, "%i moves in %li.%li s", m_game->GetLevelManager()->GetMoveCount(), lTime / 1000, (lTime / 100) % 10) ;
   m_game->GetSubText()->SetText((256 - strlen(buffer)*8) / 16, 7, buffer) ;
   m_game->GetSubText()->EnableTextWindow(32, 64, 192, 80) ;
+  m_game->GetAudio()->PlayEffect(SFX_APPLAUSE) ;
   return true ;
 }
 

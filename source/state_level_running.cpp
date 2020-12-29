@@ -1,6 +1,7 @@
 #include "gameclass.h"
 #include "state_level_running.h"
 #include <nds.h>
+#include "soundbank.h"
 
 #include <stdio.h>
 
@@ -12,6 +13,11 @@ CLEVELRUNNINGSTATE::CLEVELRUNNINGSTATE(CGAME *game)
 
 bool CLEVELRUNNINGSTATE::OnEnter()
 {
+//  if (m_game->GetLevelManager()->GetCurrentLevelTime() == 0)
+  {
+    // this is the start of a level, so play the level start sound effect
+    m_game->GetAudio()->PlayEffect(SFX_START) ;
+  }
   m_game->GetLevelManager()->ContinueLevelTime() ;
   m_game->GetSubText()->Clear() ;  
   m_game->GetMainText()->Clear() ;  
