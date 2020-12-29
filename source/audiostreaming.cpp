@@ -27,6 +27,7 @@ CAUDIOSTREAMING::CAUDIOSTREAMING()
   
   mmLoadEffect( SFX_START );
   mmLoadEffect( SFX_APPLAUSE );
+  mmLoadEffect( SFX_TICK );
   
 }
 
