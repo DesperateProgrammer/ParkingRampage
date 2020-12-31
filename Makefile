@@ -26,11 +26,11 @@ INCLUDES := include
 DATA     :=
 GRAPHICS := gfx
 AUDIO    := audio
-ICON     := icon.bmp
+ICON     := 
 
 GAME_TITLE      := Parkin'Rampage
 GAME_SUBTITLE1  := Puzzle Game
-GAME_SUBTITLE2  := 
+GAME_SUBTITLE2  := https://mighty-max.itch.io/parkin-rampage
 
 
 # specify a directory which contains the nitro filesystem
