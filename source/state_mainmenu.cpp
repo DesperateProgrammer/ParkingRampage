@@ -7,6 +7,7 @@
 #include "menuitem_coloredenumeration.h"
 #include "menuitem_statechange.h"
 #include "menuitem_slider.h"
+#include "storage.h"
 
 CMAINMENUSTATE::CMAINMENUSTATE(CGAME *game) 
 {
@@ -43,6 +44,10 @@ bool CMAINMENUSTATE::OnLeave()
   delete m_menu ;
   for (unsigned int i = 0; i< sizeof(m_menuitems) / sizeof(m_menuitems[0]);i++)
     delete m_menuitems[i] ;
+    
+  CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_MUSIC)->SetUInt32( m_game->GetAudio()->GetMusicVolume()) ;
+  CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_SFX)->SetUInt32( m_game->GetAudio()->GetEffectVolume()) ;    
+  CSTORAGE::GetInstance()->Flush() ;
   return true ;
 }
 

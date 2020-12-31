@@ -1,6 +1,7 @@
 #include "gameclass.h"
 #include "leveltiles.h"
 #include "sprite.h"
+#include "storage.h"
 #include <stdio.h>
 #include <nds.h>
 
@@ -90,6 +91,13 @@ void CGAME::Initialize()
   m_levelManager = new CLEVELMANAGER(this) ;
 
   m_audio = CAUDIOSTREAMING::GetInstance() ;
+  
+  uint32_t mVolume = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_MUSIC)->GetUInt32() ;
+  uint32_t eVolume = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_SFX)->GetUInt32() ;
+  m_audio->SetMusicVolume(mVolume) ;
+  m_audio->SetEffectVolume(eVolume) ;
+  
+  
   RegisterState(new CGAMELOADINGSTATE(this), GAMESTATE_LOADING) ;
   RegisterState(new CMAINMENUSTATE(this), GAMESTATE_MAINMENU) ;
   RegisterState(new CLEVELLOADINGSTATE(this), GAMESTATE_LEVELLOADING) ;

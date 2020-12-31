@@ -26,7 +26,12 @@ INCLUDES := include
 DATA     :=
 GRAPHICS := gfx
 AUDIO    := audio
-ICON     :=
+ICON     := icon.bmp
+
+GAME_TITLE      := Parkin'Rampage
+GAME_SUBTITLE1  := Puzzle Game
+GAME_SUBTITLE2  := 
+
 
 # specify a directory which contains the nitro filesystem
 # this is relative to the Makefile
@@ -54,7 +59,7 @@ LIBS := -lfilesystem -lfat $(LIBS)
 endif
 # automagically add maxmod library
 ifneq ($(strip $(AUDIO)),)
-LIBS := -lmm9 $(LIBS)
+LIBS := -lmm9 -lfat $(LIBS)
 endif
 
 #---------------------------------------------------------------------------------

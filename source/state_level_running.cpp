@@ -13,7 +13,7 @@ CLEVELRUNNINGSTATE::CLEVELRUNNINGSTATE(CGAME *game)
 
 bool CLEVELRUNNINGSTATE::OnEnter()
 {
-//  if (m_game->GetLevelManager()->GetCurrentLevelTime() == 0)
+  if (m_game->GetLevelManager()->GetCurrentLevelTime() == 0)
   {
     // this is the start of a level, so play the level start sound effect
     m_game->GetAudio()->PlayEffect(SFX_START) ;

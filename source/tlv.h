@@ -22,5 +22,13 @@ typedef class CTLV
    
    std::string Serialize() ;
    
+   uint32_t GetTag() { return m_tag; } ;
+
+    uint32_t GetChildCount() ;
+    CTLV *GetChild(uint32_t index) ;
+    
+    
+    void SetUInt32(uint32_t value) ;
+    uint32_t GetUInt32() ;
     
 } CTLV ;

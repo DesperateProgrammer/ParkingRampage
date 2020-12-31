@@ -121,3 +121,59 @@ std::string CTLV::Serialize()
   }
   return tmp;
 }
+
+uint32_t CTLV::GetChildCount()
+{
+  if (m_tag & TAG_FLAG_RECURSIVE)
+  {
+    return m_childs.size() ;
+  } else
+  {
+    return 0 ;
+  }
+}
+
+CTLV *CTLV::GetChild(uint32_t index) 
+{
+  if (m_tag & TAG_FLAG_RECURSIVE)
+  {
+    if (index >= m_childs.size())
+      return 0 ;
+    return m_childs[index] ;
+  } else
+  {
+    return 0 ;
+  }
+}
+
+void CTLV::SetUInt32(uint32_t value) 
+{
+  if (m_tag & TAG_FLAG_RECURSIVE)
+  {
+    return ;
+  }
+  char buffer[4] ;
+  for (int i=0;i<4;i++)
+  {
+    buffer[i] = (value >> (i*8)) & 0xff ;
+  }
+  m_leaf = std::string(buffer, 4) ;
+}
+
+uint32_t CTLV::GetUInt32() 
+{
+  if (m_tag & TAG_FLAG_RECURSIVE)
+  {
+    return 0;
+  }
+  if (m_leaf.length() < 4)
+  {
+    return 0;
+  }
+  uint32_t tmp = 0 ;
+  for (int i=0;i<4;i++)
+  {
+    tmp |= ((uint32_t)m_leaf[i]) << (i*8) ;
+  }
+  return tmp ;
+}
