@@ -24,6 +24,7 @@
 #define GAMESTATE_LEVELPAUSED     4
 #define GAMESTATE_LEVELWON        5
 #define GAMESTATE_LEVELSELECT     6
+#define GAMESTATE_CONFIG          7
 
 #define SCREEN_TOP                0
 #define SCREEN_BOTTOM             1

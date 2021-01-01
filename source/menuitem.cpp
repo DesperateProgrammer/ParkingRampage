@@ -11,7 +11,7 @@ CMENUITEM::CMENUITEM(class CGAME *game, uint32_t id, std::string caption)
 void CMENUITEM::OnTick(uint8_t y) 
 {
   std::string tmp = "" ;
-  tmp.append(16 - m_caption.length() / 2, (char)' ') ;
+  tmp.append(16 - (m_caption.length() + 1) / 2, (char)' ') ;
   tmp += m_caption ;
   if (tmp.length() < 32)
     tmp.append(32 - tmp.length(), (char)' ') ;

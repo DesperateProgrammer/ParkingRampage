@@ -12,6 +12,7 @@
 #include "state_level_running.h"
 #include "state_level_paused.h"
 #include "state_level_won.h"
+#include "state_control_menu.h"
 
 class CGAME *CGAME::m_instance = 0 ;
 
@@ -97,6 +98,9 @@ void CGAME::Initialize()
   m_audio->SetMusicVolume(mVolume) ;
   m_audio->SetEffectVolume(eVolume) ;
   
+  uint32_t keyMapping = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_KEYMAPPING)->GetUInt32() ;
+  GetInputManager()->ActivatePreconfiguredMapping((int8_t)keyMapping) ;
+  
   
   RegisterState(new CGAMELOADINGSTATE(this), GAMESTATE_LOADING) ;
   RegisterState(new CMAINMENUSTATE(this), GAMESTATE_MAINMENU) ;
@@ -105,6 +109,8 @@ void CGAME::Initialize()
   RegisterState(new CLEVELRUNNINGSTATE(this), GAMESTATE_LEVELRUNNING) ;
   RegisterState(new CLEVELSELECTSTATE(this), GAMESTATE_LEVELSELECT) ;
   RegisterState(new CLEVELWONSTATE(this), GAMESTATE_LEVELWON) ;
+  RegisterState(new CCONTROLMENUSTATE(this), GAMESTATE_CONFIG) ;
+  
   ChangeState(GAMESTATE_LOADING);
 } 
 

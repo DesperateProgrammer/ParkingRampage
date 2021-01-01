@@ -20,5 +20,7 @@
 #define KEYALIAS_SELECT_PREVIOUS      17
 #define KEYALIAS_SELECT_START         18
 
+#define KEYMAPPING_DPADTOMOVE         0
+#define KEYMAPPING_DPADTOSELECT       1
 
-extern const uint16_t gDefaultKeyMapping[] ;
+extern const uint16_t *gPredefinedKeyMappings[] ;

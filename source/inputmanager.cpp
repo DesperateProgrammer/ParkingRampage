@@ -4,9 +4,37 @@
 CINPUTMANAGER::CINPUTMANAGER()
 {
   m_keysDown = m_keysHeld = m_keysReleased = 0 ;
-  for (int i=0;gDefaultKeyMapping[i];i+=2)
+  ActivatePreconfiguredMapping(0) ;
+}
+
+int8_t CINPUTMANAGER::GetActivePreconfiguredMapping() 
+{
+  int slot = 0 ;
+  while (gPredefinedKeyMappings[slot])
   {
-    SetKeyMapping(gDefaultKeyMapping[i], gDefaultKeyMapping[i+1]) ;
+    bool equal = true;
+    for (int i=0;gPredefinedKeyMappings[slot][i];i+=2)
+    {
+      if (GetKeyMapping(gPredefinedKeyMappings[slot][i]) != gPredefinedKeyMappings[slot][i+1])
+      {
+        equal = false ;
+        break;
+      }
+    }
+    if (equal)
+      return slot ;
+    slot++ ;
+  }
+  return -1 ;
+}
+
+void CINPUTMANAGER::ActivatePreconfiguredMapping(int8_t slot) 
+{
+  if (slot < 0)
+    return ;
+  for (int i=0;gPredefinedKeyMappings[slot][i];i+=2)
+  {
+    SetKeyMapping(gPredefinedKeyMappings[slot][i], gPredefinedKeyMappings[slot][i+1]) ;
   }
 }
 

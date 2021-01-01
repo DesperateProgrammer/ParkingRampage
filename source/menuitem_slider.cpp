@@ -36,7 +36,7 @@ void CMENUITEMSLIDER::OnTick(uint8_t y)
   uint32_t valuePerChar = (m_max - m_min) / 8 ;
   for (unsigned int i=0;i<m_value / valuePerChar ; i++)
   {
-    buffer[i+4] = 0x0E ;
+    buffer[i+2+m_caption.length()] = 0x0E ;
   }
 
   if ((m_value % valuePerChar) / valuePerStep)

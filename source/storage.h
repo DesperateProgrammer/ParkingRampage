@@ -7,8 +7,9 @@
 
 #define CONFIG_ROOT     ((unsigned long)(TAG_FLAG_RECURSIVE | (uint32_t)0x474643))
 
-#define CFGTAG_VOLUME_MUSIC     0
-#define CFGTAG_VOLUME_SFX       1
+#define CFGTAG_VOLUME_MUSIC           0
+#define CFGTAG_VOLUME_SFX             1
+#define CFGTAG_VOLUME_KEYMAPPING      2
 
 typedef class CSTORAGE
 {

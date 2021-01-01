@@ -20,7 +20,8 @@ bool CMAINMENUSTATE::OnEnter()
   m_game->StartFade(1, eFADEIN, MAINMENU_FADETIME) ;
   m_mainMenuTiles->Initialize() ;          
   m_menu = new CMENUWITHCARSELECTOR(m_game) ;
-  m_menuitems[0] = new CMENUITEMSLIDER(m_game, MAINMENUITEM_VOLUME, "\x0D\x0D", 0, 1024, m_game->GetAudio()->GetMusicVolume()) ;
+  m_menuitems[0] = new CMENUITEMGAMESTATE(m_game, 0, "Options", GAMESTATE_CONFIG) ;
+//  m_menuitems[0] = new CMENUITEMSLIDER(m_game, MAINMENUITEM_VOLUME, "\x0D\x0D", 0, 1024, m_game->GetAudio()->GetMusicVolume()) ;
   m_menuitems[1] = new CMENUITEMCOLOREDENUMERATION(m_game, MAINMENUITEM_DIFFICULTY, "Difficulty") ;
   ((CMENUITEMCOLOREDENUMERATION *)m_menuitems[1])->AddEntry((uint32_t)eBEGINNER, "Beginner", 3) ;
   ((CMENUITEMCOLOREDENUMERATION *)m_menuitems[1])->AddEntry((uint32_t)eINTERMEDIATE, "Intermediate", 5) ;
@@ -45,9 +46,6 @@ bool CMAINMENUSTATE::OnLeave()
   for (unsigned int i = 0; i< sizeof(m_menuitems) / sizeof(m_menuitems[0]);i++)
     delete m_menuitems[i] ;
     
-  CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_MUSIC)->SetUInt32( m_game->GetAudio()->GetMusicVolume()) ;
-  CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_SFX)->SetUInt32( m_game->GetAudio()->GetEffectVolume()) ;    
-  CSTORAGE::GetInstance()->Flush() ;
   return true ;
 }
 
@@ -55,6 +53,5 @@ bool CMAINMENUSTATE::OnTick()
 {
   m_menu->OnTick() ;
   m_game->GetLevelManager()->SetDifficulty((EDIFFICULTY)((CMENUITEMCOLOREDENUMERATION *)m_menuitems[1])->GetValue()) ;
-  m_game->GetAudio()->SetMusicVolume(((CMENUITEMSLIDER *)m_menuitems[0])->GetValue()) ;
   return true ;
 }

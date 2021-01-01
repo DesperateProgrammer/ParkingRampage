@@ -64,5 +64,8 @@ typedef class CINPUTMANAGER
     uint16_t GetKeyMapping(uint16_t alias) ;
     bool IsKeyForAlias(uint16_t key, uint16_t alias) ;
     
+    int8_t GetActivePreconfiguredMapping() ;
+    void ActivatePreconfiguredMapping(int8_t slot) ;
+    
 
 } CINPUTMANAGER ;

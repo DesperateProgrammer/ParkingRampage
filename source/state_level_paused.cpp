@@ -17,10 +17,19 @@ bool CLEVELPAUSEDSTATE::OnEnter()
   m_game->GetSubText()->EnableTextWindow(32, 64, 192, 80) ;  
   m_game->GetMainText()->SetText(4, 2, (char *)"   In level controls:") ;
   m_game->GetMainText()->SetText(4, 3, (char *)"   \x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02\x02") ;
-  m_game->GetMainText()->SetText(6, 4, (char *)"\x10\x13\x10  Move selection") ;
   m_game->GetMainText()->SetText(6, 6, (char *)" \x12   Pause") ;
-  m_game->GetMainText()->SetText(6, 8, (char *)"\x14\x15\x16  Move car") ;
-  m_game->GetMainText()->EnableTextWindow(32, 32, 192, 128) ;  
+
+  if (m_game->GetInputManager()->GetActivePreconfiguredMapping() == KEYMAPPING_DPADTOMOVE)
+  {
+    m_game->GetMainText()->SetText(6, 4, (char *)"\x10\x13\x10  Move selection") ;
+    m_game->GetMainText()->SetText(6, 8, (char *)"\x14\x15\x16  Move car") ;
+    m_game->GetMainText()->EnableTextWindow(32, 32, 192, 128) ;  
+  } else
+  {
+    m_game->GetMainText()->SetText(6, 4, (char *)"\x10\x13\x10  Move car") ;
+    m_game->GetMainText()->SetText(6, 8, (char *)"\x14\x15\x16  Move selection") ;
+    m_game->GetMainText()->EnableTextWindow(32, 32, 192, 128) ;  
+  }
   return true ;
 }
 

@@ -60,7 +60,7 @@ void CMENUITEMCOLOREDENUMERATION::RemoveEntry(uint32_t value)
 void CMENUITEMCOLOREDENUMERATION::OnTick(uint8_t y)
 {
   std::string tmp = "" ;
-  tmp.append(16 - m_entries[m_selection].name.length() / 2, (char)' ') ;
+  tmp.append(16 - (m_entries[m_selection].name.length() + 1)/ 2, (char)' ') ;
   tmp += m_entries[m_selection].name ;
   if (tmp.length() < 32)
     tmp.append(32 - tmp.length(), (char)' ') ;
