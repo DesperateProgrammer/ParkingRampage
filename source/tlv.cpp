@@ -177,3 +177,21 @@ uint32_t CTLV::GetUInt32()
   }
   return tmp ;
 }
+
+void CTLV::SetString(std::string value) 
+{
+  if (m_tag & TAG_FLAG_RECURSIVE)
+  {
+    return;
+  }
+  m_leaf = value ;
+}
+
+std::string CTLV::GetString() 
+{
+  if (m_tag & TAG_FLAG_RECURSIVE)
+  {
+    return "";
+  }
+  return m_leaf ;
+}

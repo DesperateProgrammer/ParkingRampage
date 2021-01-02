@@ -10,6 +10,11 @@
 #define CFGTAG_VOLUME_MUSIC           0
 #define CFGTAG_VOLUME_SFX             1
 #define CFGTAG_VOLUME_KEYMAPPING      2
+#define CFGTAG_HIGHSCORES             (TAG_FLAG_RECURSIVE | 3)
+#define CFGTAG_LEVELDATA(hash)        (TAG_FLAG_RECURSIVE | hash)
+#define CFGTAG_LEVELMOVES             0
+#define CFGTAG_LEVELTIME              1
+#define CFGTAG_PLAYER                 2
 
 typedef class CSTORAGE
 {

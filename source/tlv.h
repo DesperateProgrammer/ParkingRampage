@@ -31,4 +31,7 @@ typedef class CTLV
     void SetUInt32(uint32_t value) ;
     uint32_t GetUInt32() ;
     
+    void SetString(std::string value) ;
+    std::string GetString() ;
+    
 } CTLV ;

@@ -4,6 +4,8 @@ typedef class CLEVELWONSTATE : public CSTATE
 {
   protected:
     CGAME *m_game ;
+    
+    bool m_isHighscore = false ;
         
   public:
     CLEVELWONSTATE(CGAME *game) ;

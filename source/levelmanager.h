@@ -2,6 +2,7 @@
 #include "leveldata.h"
 #include "tilemap.h"
 #include "gameclass.h"
+#include <string>
 
 
 #define CARCOUNT_MAX      16
@@ -50,6 +51,7 @@ typedef class CLEVELMANAGER
 
     uint16_t GetLevelCountForDifficulty(const EDIFFICULTY targetDiff) ;
     uint16_t GetLevel(const EDIFFICULTY targetDiff, uint16_t index);
+    uint32_t GetLevel() { return levelNumber; } ;
     
     void ResetLevel() ;
     
@@ -89,5 +91,8 @@ typedef class CLEVELMANAGER
     
     uint32_t GetLevelHash(uint32_t index) ;
     
+    bool GetHighScore(uint32_t index, uint32_t &time, uint32_t &moves, std::string &player) ;
+    void SetHighScore(uint32_t index, uint32_t time, uint32_t moves, std::string player) ;
+
 
 } CLEVELMANAGER ;

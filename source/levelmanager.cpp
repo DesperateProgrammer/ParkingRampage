@@ -1,6 +1,7 @@
 #include "levelmanager.h"
 #include "leveltiles.h"
 #include "murmur3.h"
+#include "storage.h"
 #include <nds.h>
 #include <stdio.h>
 
@@ -27,7 +28,101 @@ uint32_t CLEVELMANAGER::GetLevelHash(uint32_t index)
   }
   return hash.Finalize(12 + gLevels[index].entityCount*4*4) ;
 }
-    
+
+bool CLEVELMANAGER::GetHighScore(uint32_t index, uint32_t &time, uint32_t &moves, std::string &player) 
+{
+  time = (uint32_t)-1 ;
+  moves = (uint32_t)-1 ;
+  player = "";
+  uint32_t levelHash = GetLevelHash(index) ;
+  CTLV *highscores = CSTORAGE::GetInstance()->GetConfig(CFGTAG_HIGHSCORES) ;
+  for (uint32_t i=0;i<highscores->GetChildCount();i++)
+  {
+    CTLV *child = highscores->GetChild(i) ;
+    if (child->GetTag() == CFGTAG_LEVELDATA(levelHash))
+    {
+      for (uint32_t q=0;q<child->GetChildCount();q++)
+      {
+        CTLV *entry = child->GetChild(q) ;
+        switch (entry->GetTag())
+        {
+          case CFGTAG_LEVELMOVES:
+            moves = entry->GetUInt32() ;
+            break ;
+          case CFGTAG_LEVELTIME:
+            time = entry->GetUInt32() ;
+            break ;
+          case CFGTAG_PLAYER:
+            player = entry->GetString() ;
+            break ;
+        }
+      }
+      return true ;
+    }
+  }
+  return false ;
+}
+
+void CLEVELMANAGER::SetHighScore(uint32_t index, uint32_t time, uint32_t moves, std::string player) 
+{
+  uint32_t levelHash = GetLevelHash(index) ;
+  CTLV *highscores = CSTORAGE::GetInstance()->GetConfig(CFGTAG_HIGHSCORES) ;
+  CTLV *level = 0 ;
+  for (uint32_t i=0;i<highscores->GetChildCount();i++)
+  {
+    CTLV *child = highscores->GetChild(i) ;
+    if (child->GetTag() == CFGTAG_LEVELDATA(levelHash))
+    {
+      level = child ;
+      break ;
+    }
+  }
+  if (!level)
+  {
+    level = new CTLV(CFGTAG_LEVELDATA(levelHash)) ;
+    highscores->AddChild(level) ;
+  }
+  bool playerDone = false, timeDone = false, moveDone = false ;
+  for (uint32_t q=0;q<level->GetChildCount();q++)
+  {
+    CTLV *entry = level->GetChild(q) ;
+    switch (entry->GetTag())
+    {
+      case CFGTAG_LEVELMOVES:
+        entry->SetUInt32(moves) ;
+        moveDone = true ;
+        break ;
+      case CFGTAG_LEVELTIME:
+        entry->SetUInt32(time) ;
+        timeDone = true ;
+        break ;
+      case CFGTAG_PLAYER:
+        playerDone = true ;
+        entry->SetString(player) ;
+        break ;
+    }
+  }
+  if (!moveDone)
+  {
+    CTLV *entry = new CTLV(CFGTAG_LEVELMOVES) ;
+    entry->SetUInt32(moves) ;
+    level->AddChild(entry) ;
+  }
+  if (!timeDone)
+  {
+    CTLV *entry = new CTLV(CFGTAG_LEVELTIME) ;
+    entry->SetUInt32(time) ;
+    level->AddChild(entry) ;
+  }
+  if (!playerDone)
+  {
+    CTLV *entry = new CTLV(CFGTAG_PLAYER) ;
+    entry->SetString(player) ;
+    level->AddChild(entry) ;
+  }
+  CSTORAGE::GetInstance()->Flush() ;
+}
+
 void CLEVELMANAGER::LoadLevel(uint16_t level) 
 {
   UnloadLevel() ;
