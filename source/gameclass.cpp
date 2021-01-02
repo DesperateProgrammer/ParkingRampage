@@ -14,6 +14,8 @@
 #include "state_level_won.h"
 #include "state_control_menu.h"
 
+#include "soundbank.h"
+
 class CGAME *CGAME::m_instance = 0 ;
 
 void CGAME::Run()
@@ -92,6 +94,13 @@ void CGAME::Initialize()
   m_levelManager = new CLEVELMANAGER(this) ;
 
   m_audio = CAUDIOSTREAMING::GetInstance() ;
+  uint32_t effects[] =  { SFX_START, SFX_APPLAUSE, SFX_TICK} ;
+  m_audio->LoadEffects(effects, 3);
+  m_audio->AddToPlaylist( MOD_MUSIC ) ;
+  
+    // Start playing the music
+	mmLoad( MOD_MUSIC );
+	mmStart( MOD_MUSIC, MM_PLAY_LOOP );
   
   uint32_t mVolume = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_MUSIC)->GetUInt32() ;
   uint32_t eVolume = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_SFX)->GetUInt32() ;
