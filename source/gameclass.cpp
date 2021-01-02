@@ -101,6 +101,10 @@ void CGAME::Initialize()
   uint32_t keyMapping = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_KEYMAPPING)->GetUInt32() ;
   GetInputManager()->ActivatePreconfiguredMapping((int8_t)keyMapping) ;
   
+  for (uint32_t i=0;i<PersonalData->nameLen;i++)
+  {
+    m_nickname += (char)(PersonalData->name[i]) ;
+  }
   
   RegisterState(new CGAMELOADINGSTATE(this), GAMESTATE_LOADING) ;
   RegisterState(new CMAINMENUSTATE(this), GAMESTATE_MAINMENU) ;

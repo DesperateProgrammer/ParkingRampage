@@ -56,12 +56,27 @@ void CLEVELSELECTSTATE::UpdateLevelSelectionInfo()
   sprintf(buffer, "  %s - %i  ", diffText, (m_levelIndexInDifficulty+1));
   m_game->GetSubText()->EnableTextWindow(4*8, 9*16+8, 24*8, 2*16) ; 
   m_game->GetMainText()->SetBiColorText(16 - strlen(buffer) / 2, 2, buffer, pal, pal+1);
+  
+  uint32_t highMoves, highTime ;
+  std::string highPlayer = "" ;
+  if (m_game->GetLevelManager()->GetHighScore(m_game->GetLevelManager()->GetLevel(), highTime, highMoves, highPlayer))
+  {
+    sprintf(buffer, "%s: %li moves", highPlayer.c_str(), highMoves);
+    m_game->GetMainText()->SetText(16 - strlen(buffer) / 2, 4, buffer);    
+    uint32_t lTime = highTime ;
+    sprintf(buffer, "%li.%li s", lTime / 1000, (lTime / 100) % 10) ;
+    m_game->GetMainText()->SetText(16 - strlen(buffer) / 2, 5, buffer);
+  } else
+  {
+    m_game->GetMainText()->SetText(10, 5, (char *)"No highscore");
+  }
+
   m_game->GetSubText()->SetText(5, 10, (char *)"\x11 Return");
   m_game->GetSubText()->SetText(19, 10, (char *)"Start \x12");
   
-  m_game->GetMainText()->SetText(7, 5, (char *)"\x14\x15\x16 Change level");
-  m_game->GetMainText()->SetText(7, 7, (char *)"\x10\x13\x10 Start level");
-  m_game->GetMainText()->EnableTextWindow(32, 24, 192, 128) ; 
+  m_game->GetMainText()->SetText(7, 7, (char *)"\x14\x15\x16 Change level");
+  m_game->GetMainText()->SetText(7, 9, (char *)"\x10\x13\x10 Start level");
+  m_game->GetMainText()->EnableTextWindow(32, 24, 192, 144) ; 
 }
 
 bool CLEVELSELECTSTATE::OnTick()

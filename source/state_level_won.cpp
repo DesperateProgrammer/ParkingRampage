@@ -39,7 +39,7 @@ bool CLEVELWONSTATE::OnEnter()
   {
     highMoves = m_game->GetLevelManager()->GetMoveCount() ;
     highTime = m_game->GetLevelManager()->GetCurrentLevelTime() ;
-    highPlayer = "Best" ; // TODO: Get name from DS Settings
+    highPlayer = m_game->GetNickname() ;
     m_game->GetLevelManager()->SetHighScore(m_game->GetLevelManager()->GetLevel(), highTime, highMoves, highPlayer) ;
   }
   

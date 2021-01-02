@@ -15,6 +15,7 @@
 #include "timemanager.h"
 #include "spritemanager.h"
 #include "statemachine.h"
+#include <string>
 #include <stdint.h>
 
 #define GAMESTATE_LOADING         0
@@ -107,6 +108,8 @@ typedef class CGAME : public CSTATEMACHINE
 
     void UpdateRotScale(uint8_t screen) ;
     
+    std::string m_nickname ;
+    
   public:
     /* Singleton */
     static class CGAME *GetInstance() { return m_instance; };
@@ -133,5 +136,7 @@ typedef class CGAME : public CSTATEMACHINE
     /* Rotate out/Rotate in */
     void StartRotScale(uint8_t screen, uint32_t timespan, int16_t rotations, uint16_t startScale, uint16_t endScale) ;
     bool IsRotScaling(uint8_t screen) ;
+    
+    std::string GetNickname() { return m_nickname; };
     
 } CGAME, LPCGAME;
