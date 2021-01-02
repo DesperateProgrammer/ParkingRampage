@@ -4,6 +4,11 @@
 #include <map>
 #include <nds.h>
 
+#define SPRITE_ORIENTATION_DOWN    0
+#define SPRITE_ORIENTATION_RIGHT   1
+#define SPRITE_ORIENTATION_UP      2
+#define SPRITE_ORIENTATION_LEFT    3
+
 typedef struct CSPRITEDATA
 {
   bool        m_inUse ;

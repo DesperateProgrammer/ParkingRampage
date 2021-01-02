@@ -1,17 +1,14 @@
 #include "storage.h"
 #include <nds.h>
 
-extern char **gArgV ;
-extern int gArgC ;
-
 class CSTORAGE *CSTORAGE::m_self = 0;
 
 CSTORAGE::CSTORAGE() 
 {
   fatInitDefault() ;
-  if (gArgC)
+  if (__system_argv->argc)
   {
-    m_basename = std::string(gArgV[0]) ;
+    m_basename = std::string(__system_argv->argv[0]) ;
     m_basename = m_basename.substr(0, m_basename.rfind(".")) ;
     FILE *tlvFile = fopen((m_basename+".cfg").c_str(), "rb+") ;
     if (tlvFile)

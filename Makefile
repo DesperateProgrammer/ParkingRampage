@@ -21,10 +21,10 @@ include $(DEVKITARM)/ds_rules
 #---------------------------------------------------------------------------------
 TARGET   := $(shell basename $(CURDIR))
 BUILD    := build
-SOURCES  := source
-INCLUDES := include
+SOURCES  := source luyten/source
+INCLUDES := include luyten/include
 DATA     :=
-GRAPHICS := gfx
+GRAPHICS := gfx luyten/gfx
 AUDIO    := audio
 ICON     := 
 

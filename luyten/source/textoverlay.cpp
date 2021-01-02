@@ -150,12 +150,13 @@ void CTEXTOVERLAY::RainbowVSyncHandler()
   static uint16_t color = 0;
   static uint32_t h = 1 << 16 ;
   h += 0x0122 * 192; // this should be ~360° / 16 lines
-  vramSetBankH(VRAM_H_LCD); // for main engine
+  vramSetBankH(VRAM_H_LCD); // for sub engine
   vramSetBankE(VRAM_E_LCD); // for main engine
   ((uint16_t *)(&VRAM_H_EXT_PALETTE[0][TEXTCOLOR_RAINBOW]))[1] = color ;
   ((uint16_t *)(&VRAM_E_EXT_PALETTE[0][TEXTCOLOR_RAINBOW]))[1] = color ;
   vramSetBankE(VRAM_E_BG_EXT_PALETTE);      
   vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);      
+
   int32_t hi = (h / 60) ;
   int32_t f = hi & 0xFFFF ;
   hi >>= 16 ;

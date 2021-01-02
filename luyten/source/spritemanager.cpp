@@ -1,5 +1,4 @@
 #include "spritemanager.h"
-#include "leveldata.h"
 
 CSPRITEMANAGER::CSPRITEMANAGER(uint8_t screen) 
 {
@@ -49,16 +48,16 @@ void CSPRITEMANAGER::SetSprite(uint8_t slot, uint16_t sprite, uint16_t x, uint16
   }
   switch (orientation)
   {
-    case ORIENTATION_DOWN:
+    case SPRITE_ORIENTATION_DOWN:
       oamSet(oam, slot, x, y, 0, 0, m_knownSprites[sprite].m_spriteSize, SpriteColorFormat_256Color, 
             m_knownSprites[sprite].m_dataSource, -1, false, false, false, false, false);
       break;
-    case ORIENTATION_UP:
+    case SPRITE_ORIENTATION_UP:
       oamSet(oam, slot, x, y, 0, 0, m_knownSprites[sprite].m_spriteSize, SpriteColorFormat_256Color, 
             m_knownSprites[sprite].m_dataSource, -1, false, false, true, true, false);
       break;
-    case ORIENTATION_RIGHT:
-    case ORIENTATION_LEFT:
+    case SPRITE_ORIENTATION_RIGHT:
+    case SPRITE_ORIENTATION_LEFT:
       oamSet(oam, slot, x - corX, y - corY, 0, 0, m_knownSprites[sprite].m_spriteSize, SpriteColorFormat_256Color, 
             m_knownSprites[sprite].m_dataSource, 0, true, false, false, false, false);
       break;
