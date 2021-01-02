@@ -2,6 +2,7 @@
 #include "state_level_running.h"
 #include <nds.h>
 #include "soundbank.h"
+#include "parkingrampage_defines.h"
 
 #include <stdio.h>
 

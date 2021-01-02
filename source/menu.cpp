@@ -1,5 +1,7 @@
 #include "menu.h"
 
+#include "parkingrampage_defines.h"
+
 CMENU::CMENU(class CGAME *game)
 {
   m_game = game ;

@@ -15,6 +15,7 @@
 #include "timemanager.h"
 #include "spritemanager.h"
 #include "statemachine.h"
+#include "parkingrampage_defines.h"
 #include <string>
 #include <stdint.h>
 

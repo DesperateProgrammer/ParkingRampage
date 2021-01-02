@@ -1,4 +1,5 @@
 #include "defaultKeyMapping.h"
+#include "parkingrampage_defines.h"
 #include <nds.h>
 
 const uint16_t gDefaultKeyMapping[] = 

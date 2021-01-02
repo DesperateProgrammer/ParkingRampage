@@ -8,6 +8,7 @@
 #include "menuitem_statechange.h"
 #include "menuitem_slider.h"
 #include "storage.h"
+#include "parkingrampage_defines.h"
 
 CMAINMENUSTATE::CMAINMENUSTATE(CGAME *game) 
 {

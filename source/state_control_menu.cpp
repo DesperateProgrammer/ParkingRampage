@@ -7,6 +7,7 @@
 #include "menuitem_coloredenumeration.h"
 #include "menuitem_statechange.h"
 #include "menuitem_slider.h"
+#include "parkingrampage_defines.h"
 #include "storage.h"
 
 CCONTROLMENUSTATE::CCONTROLMENUSTATE(CGAME *game) 

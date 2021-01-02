@@ -1,5 +1,6 @@
 #include "gameclass.h"
 #include "state_level_paused.h"
+#include "parkingrampage_defines.h"
 #include <nds.h>
 
 CLEVELPAUSEDSTATE::CLEVELPAUSEDSTATE(CGAME *game) 

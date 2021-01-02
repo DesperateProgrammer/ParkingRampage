@@ -1,5 +1,6 @@
 #include "gameclass.h"
 #include "state_level_select.h"
+#include "parkingrampage_defines.h"
 #include <nds.h>
 #include <stdio.h>
 
