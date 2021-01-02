@@ -1,7 +1,7 @@
-#include "gameclass.h"
+#include "gamebase.h"
 #include <nds.h>
 
-void CGAME::StartFade(uint8_t screen, EFADE mode, uint32_t timespan) 
+void CGAMEBASE::StartFade(uint8_t screen, EFADE mode, uint32_t timespan) 
 {
   if (screen >= 2)
     return ;
@@ -10,18 +10,18 @@ void CGAME::StartFade(uint8_t screen, EFADE mode, uint32_t timespan)
   m_fadeMode[screen] = mode ;
 }
 
-EFADE CGAME::GetFadeMode(uint8_t screen)
+EFADE CGAMEBASE::GetFadeMode(uint8_t screen)
 {
   return m_fadeMode[screen] ;
 }
 
-bool CGAME::IsFading(uint8_t screen)
+bool CGAMEBASE::IsFading(uint8_t screen)
 {
   uint32_t time = GetTimeManager()->GetTimerTicks() ;
   return ((m_fadeEnd[screen] > time) && (m_fadeStart[screen] < time)) ;
 }
 
-void CGAME::StartRotScale(uint8_t screen, uint32_t timespan, int16_t rotations, uint16_t startScale, uint16_t endScale) 
+void CGAMEBASE::StartRotScale(uint8_t screen, uint32_t timespan, int16_t rotations, uint16_t startScale, uint16_t endScale) 
 {
   if (screen >= 2)
     return ;
@@ -32,13 +32,13 @@ void CGAME::StartRotScale(uint8_t screen, uint32_t timespan, int16_t rotations, 
   m_rotations[screen] += rotations ;
 }
 
-bool CGAME::IsRotScaling(uint8_t screen) 
+bool CGAMEBASE::IsRotScaling(uint8_t screen) 
 {
   uint32_t time = GetTimeManager()->GetTimerTicks() ;
   return ((m_rotscaleEnd[screen] > time) && (m_rotscaleStart[screen] < time)) ;
 }
 
-void CGAME::UpdateFading(uint8_t screen) 
+void CGAMEBASE::UpdateFading(uint8_t screen) 
 {
   if (screen >= 2)
     return ;
@@ -70,7 +70,7 @@ void CGAME::UpdateFading(uint8_t screen)
     }  }
 }
 
-void CGAME::UpdateRotScale(uint8_t screen) 
+void CGAMEBASE::UpdateRotScale(uint8_t screen) 
 {
 #if 1
   if (screen >= 2)

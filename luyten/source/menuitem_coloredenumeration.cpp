@@ -1,6 +1,6 @@
 #include "menuitem_coloredenumeration.h"
 
-CMENUITEMCOLOREDENUMERATION::CMENUITEMCOLOREDENUMERATION(class CGAME *game, uint32_t id, std::string caption) 
+CMENUITEMCOLOREDENUMERATION::CMENUITEMCOLOREDENUMERATION(class CGAMEBASE *game, uint32_t id, std::string caption) 
 : CMENUITEM(game,id,caption)
 {
   m_selection = 0 ;

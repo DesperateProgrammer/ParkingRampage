@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gamebase.h"
 #include "menuitem.h"
 #include "menuitem_coloredenumeration.h"
 #include "menuitem_statechange.h"
@@ -11,10 +12,10 @@ typedef class CMENU
     std::vector<CMENUITEM *>  m_items ;
     uint32_t                  m_selection ;
     uint32_t                  m_firstVisible ;
-    class CGAME *             m_game ;
+    class CGAMEBASE *         m_game ;
         
   public:
-    CMENU(class CGAME *game) ;
+    CMENU(class CGAMEBASE *game) ;
     
     virtual ~CMENU() {} ;
 

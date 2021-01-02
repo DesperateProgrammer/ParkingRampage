@@ -1,8 +1,6 @@
 #include "menu.h"
 
-#include "parkingrampage_defines.h"
-
-CMENU::CMENU(class CGAME *game)
+CMENU::CMENU(class CGAMEBASE *game)
 {
   m_game = game ;
   m_firstVisible = m_selection = 0 ;

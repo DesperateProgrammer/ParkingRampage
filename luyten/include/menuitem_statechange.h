@@ -1,14 +1,14 @@
 #pragma once
 
 #include "menuitem.h"
-#include "gameclass.h"
+#include "gamebase.h"
 
 typedef class CMENUITEMGAMESTATE : public CMENUITEM
 {
   protected:
     uint32_t      m_targetState ;
   public:
-    CMENUITEMGAMESTATE(class CGAME *game, uint32_t id, std::string caption, uint32_t targetState) 
+    CMENUITEMGAMESTATE(class CGAMEBASE *game, uint32_t id, std::string caption, uint32_t targetState) 
       : CMENUITEM(game, id, caption), m_targetState(targetState) 
       {};
     

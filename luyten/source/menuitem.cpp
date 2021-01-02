@@ -1,7 +1,7 @@
 #include "menuitem.h"
-#include "gameclass.h"
+#include "gamebase.h"
 
-CMENUITEM::CMENUITEM(class CGAME *game, uint32_t id, std::string caption) 
+CMENUITEM::CMENUITEM(class CGAMEBASE *game, uint32_t id, std::string caption) 
 {
   m_game = game ;
   m_id = id ;

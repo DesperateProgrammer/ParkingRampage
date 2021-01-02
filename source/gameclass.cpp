@@ -18,13 +18,6 @@
 
 class CGAME *CGAME::m_instance = 0 ;
 
-void CGAME::Run()
-{
-  Initialize();
-  while (Tick());
-  Destruct();
-}
-
 void CGAME::LoadCarSprites()
 {
   // Cars, Length 2
@@ -51,69 +44,32 @@ void CGAME::LoadCarSprites()
 void CGAME::Initialize()
 {
   if (m_instance)
-    return ; // Only one instance is allowed to initialize
+    return ; // Only one instance is allowed to initialize    
   m_instance = this ;
+  
+  CGAMEBASE::Initialize() ;
     
-  
-  m_mainText = new CTEXTOVERLAY(0) ;
-  m_subText = new CTEXTOVERLAY(1) ;
-  
- 
-  
-  for (int screen=0;screen<2;screen++)
-  {
-    // initial fading values
-    m_fadeStart[screen] = m_fadeEnd[screen] = 0 ;
-    m_fadeMode[screen] = eFADEIN ;
-    // initial rotscale values
-    m_rotscaleStart[screen] = 0 ;
-    m_rotscaleEnd[screen] = 0 ;
-    m_startScale[screen] = 1 << 12 ;
-    m_endscale[screen] = 1 << 12 ;
-    m_rotations[screen] = 0 ;
-  }
-  
-  m_time = new CTIMEMANAGER() ;
-
-
-  videoSetModeSub(MODE_2_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG3_ACTIVE);
-  videoSetMode(MODE_2_2D | DISPLAY_BG0_ACTIVE | DISPLAY_BG3_ACTIVE);
-  
-  m_mainText->Initialize() ;
-  m_subText->Initialize() ;
-  
-  vramSetBankD(VRAM_D_SUB_SPRITE);
-  oamInit(&oamSub, SpriteMapping_1D_128, false);
-	dmaCopy(spritePal, SPRITE_PALETTE_SUB, 512);
-  
-  m_mainSprites = new CSPRITEMANAGER(0) ;
-  m_subSprites = new CSPRITEMANAGER(1)  ;
   
   LoadCarSprites();
     
   m_levelManager = new CLEVELMANAGER(this) ;
 
-  m_audio = CAUDIOSTREAMING::GetInstance() ;
-  uint32_t effects[] =  { SFX_START, SFX_APPLAUSE, SFX_TICK} ;
-  m_audio->LoadEffects(effects, 3);
-  m_audio->AddToPlaylist( MOD_MUSIC ) ;
-  
-    // Start playing the music
-	mmLoad( MOD_MUSIC );
-	mmStart( MOD_MUSIC, MM_PLAY_LOOP );
-  
   uint32_t mVolume = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_MUSIC)->GetUInt32() ;
   uint32_t eVolume = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_SFX)->GetUInt32() ;
   m_audio->SetMusicVolume(mVolume) ;
   m_audio->SetEffectVolume(eVolume) ;
+
+
+  uint32_t effects[] =  { SFX_START, SFX_APPLAUSE, SFX_TICK} ;
+  m_audio->LoadEffects(effects, 3);
+  m_audio->AddToPlaylist( MOD_MUSIC ) ;
   
+  // Start playing the music
+	mmLoad( MOD_MUSIC );
+	mmStart( MOD_MUSIC, MM_PLAY_LOOP );
+    
   uint32_t keyMapping = CSTORAGE::GetInstance()->GetConfig(CFGTAG_VOLUME_KEYMAPPING)->GetUInt32() ;
   GetInputManager()->ActivatePreconfiguredMapping((int8_t)keyMapping) ;
-  
-  for (uint32_t i=0;i<PersonalData->nameLen;i++)
-  {
-    m_nickname += (char)(PersonalData->name[i]) ;
-  }
   
   RegisterState(new CGAMELOADINGSTATE(this), GAMESTATE_LOADING) ;
   RegisterState(new CMAINMENUSTATE(this), GAMESTATE_MAINMENU) ;
@@ -126,22 +82,5 @@ void CGAME::Initialize()
   
   ChangeState(GAMESTATE_LOADING);
 } 
-
-void CGAME::Destruct()
-{
-}
-
-void CGAME::OnEveryTick()
-{
-  swiWaitForVBlank();
-  m_input.Tick() ;
-  
-  for (int screen=0;screen<2;screen++)
-  {  
-    UpdateFading(screen);
-    UpdateRotScale(screen) ;
-  }
-}
-
 
  

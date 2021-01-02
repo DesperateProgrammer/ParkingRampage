@@ -6,6 +6,11 @@
 #include <map>
 #include <nds.h>
 
+#define KEYALIAS_MENU_UP              0x8001
+#define KEYALIAS_MENU_DOWN            0x8002
+#define KEYALIAS_MENU_MODIFY_MINUS    0x8003
+#define KEYALIAS_MENU_MODIFY_PLUS     0x8004
+
 #define INPUTEVENT_DOWN       1
 #define INPUTEVENT_HELD       2
 #define INPUTEVENT_RELEASED   4

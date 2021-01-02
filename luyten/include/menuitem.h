@@ -9,9 +9,9 @@ typedef class CMENUITEM
   protected:
     uint32_t      m_id ;
     std::string   m_caption ;
-    class CGAME * m_game ;
+    class CGAMEBASE * m_game ;
   public:
-    CMENUITEM(class CGAME *game, uint32_t id, std::string caption) ;
+    CMENUITEM(class CGAMEBASE *game, uint32_t id, std::string caption) ;
     
     virtual ~CMENUITEM() {} ;
     

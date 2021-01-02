@@ -1,7 +1,7 @@
 #pragma once
 
 #include "menuitem.h"
-#include "gameclass.h"
+#include "gamebase.h"
 #include <vector>
 
 typedef struct SMENUITEMCOLOREDENUMERATIONENTRY
@@ -17,7 +17,7 @@ typedef class CMENUITEMCOLOREDENUMERATION : public CMENUITEM
     vector<SMENUITEMCOLOREDENUMERATIONENTRY> m_entries ;
     uint32_t      m_selection ;
   public:
-    CMENUITEMCOLOREDENUMERATION(class CGAME *game, uint32_t id, std::string caption) ;
+    CMENUITEMCOLOREDENUMERATION(class CGAMEBASE *game, uint32_t id, std::string caption) ;
     
     virtual void OnTouch(touchPosition pos) ;    
     virtual void OnModifyPlus() ;    

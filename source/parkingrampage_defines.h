@@ -1,11 +1,8 @@
 #pragma once
 
 /* KEY Mappings */
+/* Values > 0x8000 are reserved, see inputmanager.h */
 
-#define KEYALIAS_MENU_UP              1
-#define KEYALIAS_MENU_DOWN            2
-#define KEYALIAS_MENU_MODIFY_MINUS    3
-#define KEYALIAS_MENU_MODIFY_PLUS     4
 #define KEYALIAS_PAUSE                6
 #define KEYALIAS_RETURN               7
 #define KEYALIAS_MOVE_LEFT            8

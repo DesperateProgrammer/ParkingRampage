@@ -1,7 +1,7 @@
 #include "menuitem_slider.h"
 #include <stdio.h>
 
-CMENUITEMSLIDER::CMENUITEMSLIDER(class CGAME *game, uint32_t id, std::string caption, uint32_t min, uint32_t max, uint32_t value) 
+CMENUITEMSLIDER::CMENUITEMSLIDER(class CGAMEBASE *game, uint32_t id, std::string caption, uint32_t min, uint32_t max, uint32_t value) 
 : CMENUITEM(game, id, caption), m_min(min), m_max(max), m_value(value)
 {
 }
