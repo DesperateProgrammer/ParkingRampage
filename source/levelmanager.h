@@ -87,5 +87,7 @@ typedef class CLEVELMANAGER
     EDIFFICULTY GetLoadedDifficulty() { return gLevels[levelNumber].difficulty; };
     void SetDifficulty(EDIFFICULTY diff) { m_difficulty = diff ; };
     
+    uint32_t GetLevelHash(uint32_t index) ;
+    
 
 } CLEVELMANAGER ;

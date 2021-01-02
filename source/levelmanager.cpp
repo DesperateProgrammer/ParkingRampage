@@ -1,5 +1,6 @@
 #include "levelmanager.h"
 #include "leveltiles.h"
+#include "murmur3.h"
 #include <nds.h>
 #include <stdio.h>
 
@@ -9,6 +10,22 @@ CLEVELMANAGER::CLEVELMANAGER(class CGAME *game)
   m_levelTiles = new CTILEMAP(1, (uint16_t *)leveltilesTiles, leveltilesTilesLen, (uint16_t *)leveltilesPal, leveltilesPalLen, (uint16_t *)leveltilesMap, leveltilesMapLen) ;
 
   UnloadLevel() ;
+}
+
+uint32_t CLEVELMANAGER::GetLevelHash(uint32_t index) 
+{
+  CMURMUR3HASH hash = CMURMUR3HASH(0) ;
+  hash.Feed(gLevels[index].width) ;
+  hash.Feed(gLevels[index].height) ;
+  hash.Feed(gLevels[index].entityCount) ;
+  for (int i=0;i<gLevels[index].entityCount;i++)
+  {
+    hash.Feed(gLevels[index].entities[i].orientation & 1) ;
+    hash.Feed(gLevels[index].entities[i].size) ;
+    hash.Feed(gLevels[index].entities[i].x) ;
+    hash.Feed(gLevels[index].entities[i].y) ;
+  }
+  return hash.Finalize(12 + gLevels[index].entityCount*4*4) ;
 }
     
 void CLEVELMANAGER::LoadLevel(uint16_t level) 
