@@ -1,0 +1,3 @@
+[submodule "luyten"]
+	path = luyten
+	url = https://github.com/DesperateProgrammer/luyten.git
