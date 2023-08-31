@@ -1,12 +1,16 @@
 #include "state_loading.h"
 #include "title.h"
+#include "title_new.h"
+#include "extendedbg.h"
 #include <stdio.h>
 
 CGAMELOADINGSTATE::CGAMELOADINGSTATE(CGAME *game) 
 {
   m_game = game ;
   m_titleTiles = new CTILEMAP(1, (uint16_t *)titleTiles, titleTilesLen, (uint16_t *)titlePal, titlePalLen, (uint16_t *)titleMap, titleMapLen) ;
-  m_mainScreenTiles = new CTILEMAP(0, (uint16_t *)titleTiles, titleTilesLen, (uint16_t *)titlePal, titlePalLen, (uint16_t *)titleMap, titleMapLen) ;  
+  //m_mainScreenTiles = new CTILEMAP(0, (uint16_t *)titleTiles, titleTilesLen, (uint16_t *)titlePal, titlePalLen, (uint16_t *)titleMap, titleMapLen) ;  
+  m_mainScreenBG = new CEXTENDEDBG((uint16_t *)title_newBitmap);
+  
 }
 
 extern int gArgC ;
@@ -14,8 +18,9 @@ extern char **gArgV ;
 
 bool CGAMELOADINGSTATE::OnEnter()
 {
-  m_mainScreenTiles->Initialize() ;
+  //m_mainScreenTiles->Initialize() ;
   m_titleTiles->Initialize() ; 
+  m_mainScreenBG->Initialize() ;
   m_game->StartFade(0, eFADEIN, TITLE_FADETIME) ;
   m_game->StartFade(1, eFADEIN, TITLE_FADETIME) ;
  
